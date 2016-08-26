@@ -31,8 +31,4 @@ public class UserMealWithExceed {
                 ", exceed=" + exceed +
                 '}';
     }
-
-    public boolean isExceed() {
-        return exceed;
-    }
 }
