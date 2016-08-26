@@ -46,4 +46,8 @@ public class UserMealWithExceed {
     public void setExceed(boolean exceed) {
         this.exceed = exceed;
     }
+
+    public boolean isExceed() {
+        return exceed;
+    }
 }
