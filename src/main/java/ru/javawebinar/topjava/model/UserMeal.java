@@ -29,15 +29,15 @@ public class UserMeal {
         return dateTime.toLocalDate();
     }
 
-    public LocalTime getLocalTime() {
-        return dateTime.toLocalTime();
-    }
-
     public String getDescription() {
         return description;
     }
 
     public int getCalories() {
         return calories;
+    }
+
+    public LocalTime getLocalTime() {
+        return dateTime.toLocalTime();
     }
 }
