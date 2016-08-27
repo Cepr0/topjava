@@ -121,7 +121,6 @@ public class UserMealsUtilTest {
         }
     }
 
-
     // Основной метод для проведения теста на нескольких наборах данных
     private void runTest(int testNum, String testName) {
         variants.put(testNum, testName);
