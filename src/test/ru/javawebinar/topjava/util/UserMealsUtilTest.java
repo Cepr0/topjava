@@ -10,9 +10,6 @@ import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-/**
- * Created by ua050339 on 25.08.2016.
- */
 public class UserMealsUtilTest {
     // База с тестовыми данными: [кол-во данных] - [список с даными]
     private static Map<Integer, List<UserMeal>> testData = new TreeMap<>();
