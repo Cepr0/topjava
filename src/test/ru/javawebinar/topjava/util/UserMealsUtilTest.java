@@ -53,6 +53,7 @@ public class UserMealsUtilTest {
 
         // Выводим заголовок таблицы результатов
         System.out.println("Variant        |   UM size | UMWE size | exc. count | Duration, ms");
+        System.out.println("------------------------------------------------------------------");
     }
 
     @AfterClass
