@@ -21,9 +21,9 @@ public class UserMealsUtilTest {
     private static Map<Integer, String> variants = new TreeMap<>();
 
     // Массив, в котором указываем кол-во данных для тестов (они же - индексы тестовых наборов данных)
-    private static int[] counts = {1_000, 5_000, 10_000, 50_000, 100_000, 500_000};
+    private static int[] counts = {1_000, 5_000, 10_000, 25_000, 50_000, 75_000, 100_000, 250_000, 500_000};
 
-    private static final int TIMEOUT = 300_000; // Значение timeout для аннотации @Test
+    private static final int TIMEOUT = 2_100_000; // Значение timeout для аннотации @Test
 
     // Заполнем базу тестовыми данными
     @BeforeClass
@@ -52,7 +52,8 @@ public class UserMealsUtilTest {
         UserMealsUtil.getFilteredWithExceeded4(testData.get(counts[2]), LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
 
         // Выводим заголовок таблицы результатов
-        System.out.println("Variant        |   UM size | UMWE size | exc. count | Duration, ms");
+        System.out.println();
+        System.out.println("Variant        |   UM size | UMWE size | Exc. count | Duration, ms");
         System.out.println("------------------------------------------------------------------");
     }
 
@@ -85,7 +86,7 @@ public class UserMealsUtilTest {
                 int exceedListSize = (curResult != null && curResult.data != null) ? curResult.data.size() : -1;
 
                 // Выводим результат
-                System.out.printf("%-14s | %9d | %9d | %10d | %12d\n"
+                System.out.printf("%-14s | %9d | %9d | %10d | %12d%n"
                         , varEntry.getValue(), testData.get(counts[j]).size(), exceedListSize, exceedCount, duration);
             }
             System.out.println("------------------------------------------------------------------");
@@ -104,7 +105,7 @@ public class UserMealsUtilTest {
 //    public void after() {
 //    }
 
-    private class ResultData {
+    private static class ResultData {
         int testNum; // Номер теста
         int dataSetNum; // Номер набора тестовых данных
         Instant start;
@@ -125,6 +126,7 @@ public class UserMealsUtilTest {
     // Основной метод для проведения теста на нескольких наборах данных
     private void runTest(int testNum, String testName) {
         variants.put(testNum, testName);
+        System.out.println(testName);
 
         for (Map.Entry<Integer, List<UserMeal>> entry : testData.entrySet()) {
             int dataSetNum = entry.getKey();
@@ -144,11 +146,12 @@ public class UserMealsUtilTest {
                 case 3:
                     result.data = UserMealsUtil.getFilteredWithExceeded3(testDataSet, LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
                     break;
-                case 4:
+                default:
                     result.data = UserMealsUtil.getFilteredWithExceeded4(testDataSet, LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
-                    break;
             }
             result.end = Instant.now();
+
+            System.out.printf("%-8s: %d%n", String.valueOf(dataSetNum), result.getDuration());
         }
     }
 
