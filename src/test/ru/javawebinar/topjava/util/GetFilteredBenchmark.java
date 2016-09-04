@@ -11,18 +11,18 @@ import ru.javawebinar.topjava.model.UserMeal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-@Warmup(iterations = 3)
+import static java.util.concurrent.ThreadLocalRandom.current;
+
+@Warmup(iterations = 10)
 @Measurement(iterations = 5)
-@BenchmarkMode({Mode.SingleShotTime,  Mode.AverageTime})
+@BenchmarkMode({Mode.SingleShotTime})
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Thread)
-public class UserMealsUtilBenchmark {
+public class GetFilteredBenchmark {
 
     // Кол-во тестовых данных на итерацию
     @Param({"100000", "300000", "400000", "500000", "600000", "700000", "800000", "900000", "1000000"})
@@ -33,23 +33,19 @@ public class UserMealsUtilBenchmark {
 
     @Setup
     public void setUp() {
-        LocalDate date = LocalDate.of(2000, Month.JANUARY, 1);
-        Random r = new Random();
-
         // Генерируем тестовые данные
         for (int i = 0; i < samplesCount; i++) {
-            date = date.plusDays(1);
-            testData.add(new UserMeal(
-                    LocalDateTime.of(date, LocalTime.of(8 + r.nextInt(13), 0))
-                    , new String[]{"Завтрак", "Обед", "Ужин"}[r.nextInt(3)]
-                    , 300 + r.nextInt(1000)));
+            LocalDate date = LocalDate.of(2010, 1, 1).plusDays(i);
+            testData.add(new UserMeal(LocalDateTime.of(date, LocalTime.of(10, 0)), "Завтрак", current().nextInt(300, 700)));
+            testData.add(new UserMeal(LocalDateTime.of(date, LocalTime.of(13, 0)), "Обед", current().nextInt(800, 1200)));
+            testData.add(new UserMeal(LocalDateTime.of(date, LocalTime.of(20, 0)), "Ужин", current().nextInt(300, 700)));
         }
     }
 
     // Запускаем измерения
     public static void main(String[] args) throws RunnerException {
         Options options = new OptionsBuilder()
-                .include(UserMealsUtilBenchmark.class.getSimpleName())
+                .include(GetFilteredBenchmark.class.getSimpleName())
                 .threads(1)
                 .forks(1)
                 .timeout(TimeValue.minutes(10))
@@ -58,7 +54,7 @@ public class UserMealsUtilBenchmark {
         new Runner(options).run();
     }
 
-    @Benchmark()
+    @Benchmark
     public void O2NCycles() throws Exception {
         UserMealsUtil.getFilteredWithExceeded0(testData, LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
     }
@@ -86,5 +82,10 @@ public class UserMealsUtilBenchmark {
     @Benchmark
     public void O2NStreamsV2() throws Exception {
         UserMealsUtil.getFilteredWithExceeded5(testData, LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
+    }
+
+    @Benchmark
+    public void O2NStreamEx() throws Exception {
+        UserMealsUtil.getFilteredWithExceeded6(testData, LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
     }
 }

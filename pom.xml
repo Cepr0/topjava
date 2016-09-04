@@ -16,7 +16,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jmh.version>RELEASE</jmh.version>
-        <junit.version>RELEASE</junit.version>
     </properties>
 
     <build>
@@ -39,7 +38,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <version>RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
@@ -52,10 +51,13 @@
             <version>${jmh.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!--StreamEx: https://habrahabr.ru/post/255659/-->
+        <!--https://github.com/amaembo/streamex-->
+        <!--https://github.com/amaembo/streamex/blob/master/CHEATSHEET.md-->
         <dependency>
             <groupId>one.util</groupId>
             <artifactId>streamex</artifactId>
-            <version>0.6.2</version>
+            <version>RELEASE</version>
         </dependency>
     </dependencies>
 

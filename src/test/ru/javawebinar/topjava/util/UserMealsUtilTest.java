@@ -7,8 +7,8 @@ import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExceed;
 
 import java.time.*;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class UserMealsUtilTest {
     // База с тестовыми данными: [кол-во данных] - [список с даными]
@@ -28,18 +28,16 @@ public class UserMealsUtilTest {
     // Заполнем базу тестовыми данными
     @BeforeClass
     public static void setUp() throws Exception {
-        LocalDate date = LocalDate.of(2012, Month.JANUARY, 1);
-        Random r = new Random();
         List<UserMeal> mealList;
-
+        ThreadLocalRandom r = ThreadLocalRandom.current();
         for (int count : counts) {
             // Генерируем данные
             mealList = new ArrayList<>();
             for (int i = 0; i < count; i++) {
-                date = date.plus(1, ChronoUnit.DAYS);
-                mealList.add(new UserMeal(LocalDateTime.of(date, LocalTime.of(10, 0)), "Завтрак", 300 + r.nextInt(400)));
-                mealList.add(new UserMeal(LocalDateTime.of(date, LocalTime.of(13, 0)), "Обед", 800 + r.nextInt(400)));
-                mealList.add(new UserMeal(LocalDateTime.of(date, LocalTime.of(20, 0)), "Ужин", 300 + r.nextInt(400)));
+                LocalDate date = LocalDate.of(2010, 1, 1).plusDays(i);
+                mealList.add(new UserMeal(LocalDateTime.of(date, LocalTime.of(10, 0)), "Завтрак", r.nextInt(300, 700)));
+                mealList.add(new UserMeal(LocalDateTime.of(date, LocalTime.of(13, 0)), "Обед", r.nextInt(800, 1200)));
+                mealList.add(new UserMeal(LocalDateTime.of(date, LocalTime.of(20, 0)), "Ужин", r.nextInt(300, 700)));
             }
             // Сохраняем в базу
             testData.put(count, mealList);
@@ -50,6 +48,8 @@ public class UserMealsUtilTest {
         UserMealsUtil.getFilteredWithExceeded1(testData.get(counts[2]), LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
         UserMealsUtil.getFilteredWithExceeded2(testData.get(counts[2]), LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
         UserMealsUtil.getFilteredWithExceeded4(testData.get(counts[2]), LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
+        UserMealsUtil.getFilteredWithExceeded5(testData.get(counts[2]), LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
+        UserMealsUtil.getFilteredWithExceeded6(testData.get(counts[2]), LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
 
         // Выводим заголовок таблицы результатов
         System.out.println();
@@ -92,7 +92,7 @@ public class UserMealsUtilTest {
             System.out.println("------------------------------------------------------------------");
         }
 
-        // "Освобождаем" память
+        // "Освобождаем" память ))
         testData.clear();
         resultData.clear();
     }
@@ -146,8 +146,14 @@ public class UserMealsUtilTest {
                 case 3:
                     result.data = UserMealsUtil.getFilteredWithExceeded3(testDataSet, LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
                     break;
-                default:
+                case 4:
                     result.data = UserMealsUtil.getFilteredWithExceeded4(testDataSet, LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
+                    break;
+                case 5:
+                    result.data = UserMealsUtil.getFilteredWithExceeded5(testDataSet, LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
+                    break;
+                default:
+                    result.data = UserMealsUtil.getFilteredWithExceeded6(testDataSet, LocalTime.of(7, 0), LocalTime.of(13, 0), 2000);
             }
             result.end = Instant.now();
 
@@ -156,27 +162,37 @@ public class UserMealsUtilTest {
     }
 
     @Test(timeout = TIMEOUT)
-    public void getFilteredWithExceeded0() throws Exception {
+    public void test0() throws Exception {
         runTest(0, "O(2n) cycle");
     }
 
     @Test(timeout = TIMEOUT)
-    public void getFilteredWithExceeded1() throws Exception {
+    public void test1() throws Exception {
         runTest(1, "O(1.5n) cycle");
     }
 
     @Test (timeout = TIMEOUT)
-    public void getFilteredWithExceeded2() throws Exception {
+    public void test2() throws Exception {
         runTest(2, "O(2n) stream");
     }
 
     @Test(timeout = TIMEOUT)
-    public void getFilteredWithExceeded3() throws Exception {
+    public void test3() throws Exception {
         runTest(3, "O(n^2?) stream");
     }
 
     @Test(timeout = TIMEOUT)
-    public void getFilteredWithExceeded4() throws Exception {
+    public void test4() throws Exception {
         runTest(4, "O(1.5n) stream");
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void test5() throws Exception {
+        runTest(5, "O(2n) stream v.2");
+    }
+
+    @Test(timeout = TIMEOUT)
+    public void test6() throws Exception {
+        runTest(6, "O(2n) StreamEx");
     }
 }
