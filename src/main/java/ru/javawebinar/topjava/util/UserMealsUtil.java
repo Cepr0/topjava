@@ -51,7 +51,7 @@ public class UserMealsUtil {
 
         Map<LocalDate, Integer> totalCaloriesPerDay = new HashMap<>();
         for (UserMeal curMeal : mealList) {
-            totalCaloriesPerDay.put(curMeal.getLocalDate(), Optional.ofNullable(totalCaloriesPerDay.get(curMeal.getLocalDate())).orElse(0) + curMeal.getCalories());
+            totalCaloriesPerDay.put(curMeal.getLocalDate(), totalCaloriesPerDay.getOrDefault(curMeal.getLocalDate(), 0) + curMeal.getCalories());
         }
 
         List<UserMealWithExceed> filteredMeals = new ArrayList<>();
@@ -72,7 +72,7 @@ public class UserMealsUtil {
         List<UserMealWithExceed> filteredMeals = new ArrayList<>();
 
         for (UserMeal curMeal : mealList) {
-            totalCaloriesPerDay.put(curMeal.getLocalDate(), Optional.ofNullable(totalCaloriesPerDay.get(curMeal.getLocalDate())).orElse(0) + curMeal.getCalories());
+            totalCaloriesPerDay.put(curMeal.getLocalDate(), totalCaloriesPerDay.getOrDefault(curMeal.getLocalDate(), 0) + curMeal.getCalories());
             addToExceedList(curMeal, filteredMeals, startTime, endTime);
         }
 
