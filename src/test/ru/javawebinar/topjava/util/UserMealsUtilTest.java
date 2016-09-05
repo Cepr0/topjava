@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.util;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExceed;
@@ -21,7 +22,7 @@ public class UserMealsUtilTest {
     private static Map<Integer, String> variants = new TreeMap<>();
 
     // Массив, в котором указываем кол-во данных для тестов (они же - индексы тестовых наборов данных)
-    private static int[] counts = {1_000, 5_000, 10_000, 25_000, 50_000, 75_000, 100_000, 250_000, 500_000};
+    private static int[] counts = {1_000, 5_000, 10_000};//, 25_000, 50_000, 75_000, 100_000, 250_000, 500_000};
 
     private static final int TIMEOUT = 2_100_000; // Значение timeout для аннотации @Test
 
@@ -176,6 +177,7 @@ public class UserMealsUtilTest {
         runTest(2, "O(2n) stream");
     }
 
+    @Ignore
     @Test(timeout = TIMEOUT)
     public void test3() throws Exception {
         runTest(3, "O(n^2?) stream");

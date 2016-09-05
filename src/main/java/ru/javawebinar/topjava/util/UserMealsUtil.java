@@ -47,7 +47,7 @@ public class UserMealsUtil {
     }
 
     // O(2n) with regular cycles
-    static List<UserMealWithExceed> getFilteredWithExceeded0(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<UserMealWithExceed> getFilteredWithExceeded0(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
         Map<LocalDate, Integer> totalCaloriesPerDay = new HashMap<>();
         for (UserMeal curMeal : mealList) {
@@ -66,7 +66,7 @@ public class UserMealsUtil {
     }
 
     // O(1.5n) with regular cycles
-    static List<UserMealWithExceed> getFilteredWithExceeded1(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<UserMealWithExceed> getFilteredWithExceeded1(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
         Map<LocalDate, Integer> totalCaloriesPerDay = new HashMap<>();
         List<UserMealWithExceed> filteredMeals = new ArrayList<>();
@@ -84,7 +84,7 @@ public class UserMealsUtil {
     }
 
     // O(2n) with streams and groupingBy
-    static List<UserMealWithExceed> getFilteredWithExceeded2(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<UserMealWithExceed> getFilteredWithExceeded2(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
         Map<LocalDate, Integer> totalCaloriesPerDay = mealList.stream()
                 .collect(Collectors.groupingBy(UserMeal::getLocalDate, Collectors.summingInt(UserMeal::getCalories)));
@@ -99,7 +99,7 @@ public class UserMealsUtil {
     }
 
     // O(n^2) with streams and groupingBy
-    static List<UserMealWithExceed> getFilteredWithExceeded3(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<UserMealWithExceed> getFilteredWithExceeded3(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         return mealList.stream()
                 .filter(curMeal -> TimeUtil.isBetween(curMeal.getLocalTime(), startTime, endTime))
                 .map(curMeal -> new UserMealWithExceed(curMeal,  mealList.stream()
@@ -108,7 +108,7 @@ public class UserMealsUtil {
     }
 
     // O(1.5n) with streams and groupingBy
-    static List<UserMealWithExceed> getFilteredWithExceeded4(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<UserMealWithExceed> getFilteredWithExceeded4(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         List<UserMealWithExceed> filteredMeals = new ArrayList<>();
 
         Map<LocalDate, Integer> totalCaloriesPerDay = mealList.stream()
@@ -120,7 +120,7 @@ public class UserMealsUtil {
     }
 
     // O(2n)v2 with streams and toMap
-    static List<UserMealWithExceed> getFilteredWithExceeded5(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<UserMealWithExceed> getFilteredWithExceeded5(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> totalCaloriesPerDay = mealList.stream()
                 .collect(Collectors.toMap(UserMeal::getLocalDate, UserMeal::getCalories, Integer::sum));
 
@@ -132,7 +132,7 @@ public class UserMealsUtil {
     }
 
     // O(2n) with StreamEx
-    static List<UserMealWithExceed> getFilteredWithExceeded6(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<UserMealWithExceed> getFilteredWithExceeded6(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> totalCaloriesPerDay = StreamEx.of(mealList)
                 .toMap(UserMeal::getLocalDate, UserMeal::getCalories, Integer::sum);
 

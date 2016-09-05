@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.util;
+package ru.javawebinar.topjava.benchmark;
 
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
@@ -7,6 +7,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
 import ru.javawebinar.topjava.model.UserMeal;
+import ru.javawebinar.topjava.util.UserMealsUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ import static java.util.concurrent.ThreadLocalRandom.current;
 @BenchmarkMode({Mode.SingleShotTime})
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @State(Scope.Thread)
-public class GetFilteredBenchmark {
+public class UserMealsBenchmark {
 
     // Кол-во тестовых данных на итерацию
     @Param({"100000", "300000", "400000", "500000", "600000", "700000", "800000", "900000", "1000000"})
@@ -45,7 +46,7 @@ public class GetFilteredBenchmark {
     // Запускаем измерения
     public static void main(String[] args) throws RunnerException {
         Options options = new OptionsBuilder()
-                .include(GetFilteredBenchmark.class.getSimpleName())
+                .include(UserMealsBenchmark.class.getSimpleName())
                 .threads(1)
                 .forks(1)
                 .timeout(TimeValue.minutes(10))
