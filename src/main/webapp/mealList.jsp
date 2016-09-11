@@ -12,7 +12,21 @@
         .normal {
             color: green;
         }
-
+        body {
+            font-family: sans-serif;
+            padding: 1em;
+        }
+        th {
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: left;
+            color: #039;
+            padding: 10px 15px;
+        }
+        td {
+            border-top: 1px solid #e8edff;
+            padding: 10px 15px;
+        }
     </style>
 </head>
 <body>
