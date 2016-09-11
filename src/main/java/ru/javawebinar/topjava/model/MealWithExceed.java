@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * GKislin
@@ -8,11 +10,8 @@ import java.time.LocalDateTime;
  */
 public class MealWithExceed {
     private final LocalDateTime dateTime;
-
     private final String description;
-
     private final int calories;
-
     private final boolean exceed;
 
     public MealWithExceed(LocalDateTime dateTime, String description, int calories, boolean exceed) {
@@ -20,6 +19,30 @@ public class MealWithExceed {
         this.description = description;
         this.calories = calories;
         this.exceed = exceed;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public String getDateToString() {
+        return dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
+
+    public LocalDate getDate() {
+        return dateTime.toLocalDate();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getCalories() {
+        return calories;
+    }
+
+    public boolean isExceed() {
+        return exceed;
     }
 
     @Override
