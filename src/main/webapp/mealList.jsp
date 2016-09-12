@@ -8,14 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal list</title>
     <style>
-        .exceeded {
-            color: red;
-        }
-
-        .normal {
-            color: green;
-        }
-
         body {
             font-family: sans-serif;
             padding: 1em;
@@ -36,6 +28,18 @@
 
         td a {
             text-decoration: none;
+        }
+
+        tr.meal-row {
+            cursor: pointer;
+        }
+
+        tr.exceeded {
+            color: red;
+        }
+
+        tr.normal {
+            color: green;
         }
 
         /*Form part start*/
@@ -141,6 +145,7 @@
             color: darkred;
             font-weight: bold;
         }
+
     </style>
 </head>
 <body>
@@ -202,7 +207,7 @@
     <jsp:useBean id="mealList" scope="request" type="java.util.List"/>
     <c:forEach items="${mealList}" var="meal">
         <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
-        <tr valign="top" class="${meal.exceed ? "exceeded" : "normal"}">
+        <tr valign="top" class="meal-row ${meal.exceed ? "exceeded" : "normal"}">
             <fmt:parseDate value="${meal.dateTime}" pattern="y-M-dd'T'H:m" var="parsedDate"/>
             <fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm" var="formatedDate"/>
             <td><a href="meals?action=update&id=${meal.id}">${formatedDate}</a></td>
