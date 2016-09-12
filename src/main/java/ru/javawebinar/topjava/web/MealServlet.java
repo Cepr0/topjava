@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -40,10 +41,14 @@ public class MealServlet extends HttpServlet {
             String description = req.getParameter("description");
             Integer calories = Integer.valueOf(req.getParameter("calories"));
 
-            Meal meal = new Meal(dateTime, description, calories);
-            meal.setId(id);
-            repository.save(meal);
-            LOG.info(meal.isNew() ? "Create new Meal {}" : "Update current meal {}", meal);
+            if (!description.isEmpty() && calories != 0) {
+                Meal meal = new Meal(dateTime, description, calories);
+                meal.setId(id);
+                repository.save(meal);
+                LOG.info(meal.isNew() ? "Create new Meal {}" : "Update current meal {}", meal.toString());
+            } else {
+                LOG.warn("Couldn't save a meal with empty data!");
+            }
         } catch (NumberFormatException | DateTimeParseException e) {
             LOG.warn("Couldn't parse meal data: {}", e.getMessage());
         }
@@ -52,13 +57,10 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        req.setAttribute("defaultLocale", Locale.getDefault().toString());
         req.setAttribute("isEditFormVisible", "none");
-        Meal curMeal = new Meal(LocalDateTime.now(), "", 0);
-        curMeal.setId(0);
-        req.setAttribute("curMeal", curMeal);
-
         String action = req.getParameter("action");
+
         if (action == null) {
             getAllMeals(req, resp);
             return;
@@ -67,59 +69,70 @@ public class MealServlet extends HttpServlet {
         Long id = getId(req);
         switch (action) {
             case "create":
-                if (id != null) {
-                    LOG.info("Create new meal...");
-                    // TODO Implement new meal action
-                }
+                create(req, resp);
                 break;
             case "update":
-                if (id != null) {
-                    LOG.info("Edit meal with ID = {} ...", id);
-                    // TODO Implement edit current meal action
-                    req.setAttribute("isEditFormVisible", "block");
-
-                    curMeal = repository.getById(id);
-                    req.setAttribute("curMeal", curMeal);
-                    getAllMeals(req, resp);
-                } else {
-                    LOG.warn("Couldn't edit meal with null or incorrect ID");
-                }
-
+                update(req, resp, id);
                 break;
             case "delete":
-                if (id != null) {
-                    LOG.info("Delete meal with ID = {} ...", id);
-                    repository.delete(id);
-                    resp.sendRedirect("meals");
-                } else {
-                    LOG.warn("Couldn't delete meal with null or incorrect ID");
-                }
+                delete(resp, id);
                 break;
             case "populate":
-                LOG.info("Populate new data...");
-                repository.populateData(TimeUtil.getRandomDate(LocalDate.of(2016, 1, 1), LocalDate.of(2016, 8, 31)));
-                resp.sendRedirect("meals");
+                populate(resp);
                 break;
-
             default:
                 LOG.info("Get all meals...");
                 getAllMeals(req, resp);
         }
     }
 
+    private void create(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        LOG.info("Create new meal...");
+        req.setAttribute("isEditFormVisible", "block");
+        Meal curMeal = new Meal(LocalDateTime.of(LocalDate.now(), LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute())), "", 0);
+        req.setAttribute("curMeal", curMeal);
+        getAllMeals(req, resp);
+    }
+
+    private void update(HttpServletRequest req, HttpServletResponse resp, Long id) throws ServletException, IOException {
+        if (id != null) {
+            LOG.info("Edit meal with ID = {} ...", id);
+            req.setAttribute("isEditFormVisible", "block");
+            Meal curMeal = repository.getById(id);
+            req.setAttribute("curMeal", curMeal);
+        } else {
+            LOG.warn("Couldn't edit meal with null or incorrect ID");
+        }
+        getAllMeals(req, resp);
+    }
+
+    private void delete(HttpServletResponse resp, Long id) throws IOException {
+        if (id != null) {
+            LOG.info("Delete meal with ID = {} ...", id);
+            repository.delete(id);
+        } else {
+            LOG.warn("Couldn't delete meal with null or incorrect ID");
+        }
+        resp.sendRedirect("meals");
+    }
+
+    private void populate(HttpServletResponse resp) throws IOException {
+        LOG.info("Populate new data...");
+        repository.populateData(TimeUtil.getRandomDate(LocalDate.of(2016, 1, 1), LocalDate.of(2016, 8, 31)));
+        resp.sendRedirect("meals");
+    }
+
     private void getAllMeals(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("mealList",
-                MealsUtil.getFilteredWithExceeded(repository.getAllSortedByDate(), LocalTime.MIN, LocalTime.MAX, 2000));
+                    MealsUtil.getFilteredWithExceeded(repository.getAllSortedByDate(), LocalTime.MIN, LocalTime.MAX, 2000));
         request.getRequestDispatcher("mealList.jsp").forward(request, response);
     }
 
     private Long getId(HttpServletRequest request) {
-        Long id = null;
         try {
-            id = Long.valueOf(request.getParameter("id"));
-        } catch (Exception e) {
-            id = null;
+            return Long.valueOf(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            return null;
         }
-        return id;
     }
 }

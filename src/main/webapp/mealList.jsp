@@ -2,8 +2,10 @@
 <%--<%@ page import="ru.javawebinar.topjava.util.TimeUtil" %>--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<html>
+<html lang="ru">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal list</title>
     <style>
         .exceeded {
@@ -32,12 +34,16 @@
             padding: 10px 15px;
         }
 
-        /*Form part*/
+        td a {
+            text-decoration: none;
+        }
+
+        /*Form part start*/
         form {
             margin: 0.5em 0;
             padding: 0;
             /*float: left;*/
-            width: 600px;
+            width: 550px;
             color: #404040;
         }
 
@@ -85,6 +91,10 @@
             margin-left: 0.5em;
         }
 
+        form .delete-button {
+            margin-left: 0.5em;
+        }
+
         form .submit-button input {
             margin-right: 0.5em;
         }
@@ -110,59 +120,95 @@
         form fieldset dt {
             /*margin-left: -0.25em;*/
         }
+
+        /*Form part end*/
+
+        .actions-block {
+            padding: 0 0 1em 1em;
+        }
+
+        .page-title {
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #039;
+        }
+
+        a:link, a:visited {
+            color: inherit;
+        }
+
+        .action-create-span {
+            color: darkred;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-<h2><a href="./">Home</a></h2>
-<h2>Meal list</h2>
-<br/>
-<a href="meals?action=populate">Populate new data</a>
-<br/>
-<jsp:useBean id="isEditFormVisible" scope="request" type="java.lang.String"/>
-<div class="editForm" style="display: ${isEditFormVisible};">
-    <form method="post" action="meals">
-        <fieldset>
-            <legend>Edit meal</legend>
-            <jsp:useBean id="curMeal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
-            <input type="hidden" name="id" value="${curMeal.id}">
-            <dl>
-                <dt><label for="dateTime">Date&Time</label></dt>
-                <%--<fmt:parseDate value="${curMeal.dateTime}" pattern="y-M-dd'T'H:m" var="parsedCurDate"/>--%>
-                <%--<fmt:formatDate value="${parsedCurDate}" pattern="yyyy-MM-dd HH:mm" var="formatedCurDate"/>--%>
-                <dd><input id="dateTime" type="datetime-local" name="dateTime" value="${curMeal.dateTime}" size="20"></dd>
-                <dt><label for="description">Description</label></dt>
-                <dd><input id="description" type="text" name="description" value="${curMeal.description}" size="50">
-                </dd>
-                <dt><label for="calories">Calories</label></dt>
-                <dd><input id="calories" type="number" name="calories" value="${curMeal.calories}"></dd>
-            </dl>
-            <button class="submit-button" type="submit">Save</button>
-            <a class="cancel-button" href="meals">Cancel</a>
-        </fieldset>
-    </form>
+<jsp:useBean id="defaultLocale" scope="request" type="java.lang.String"/>
+<fmt:setLocale value="${defaultLocale}" />
+
+<h2 class="nav-menu-block"><a href="./">Home</a></h2>
+<h2 class="page-title">Meal list</h2>
+<div class="actions-block">
+    <span class="action-create-span"><a class="action-create" href="meals?action=create">Add new meal</a></span> |
+    <span class="action-populate-span"><a class="actions-populate"
+                                          href="meals?action=populate">Populate new data</a></span>
 </div>
-<table>
+<jsp:useBean id="isEditFormVisible" scope="request" type="java.lang.String"/>
+
+<c:catch var="curMealException">
+    <jsp:useBean id="curMeal" scope="request" type="ru.javawebinar.topjava.model.Meal"/>
+</c:catch>
+
+<c:if test="${curMeal != null}">
+
+    <div class="editForm" style="display: ${isEditFormVisible};">
+        <form method="post" action="meals">
+            <fieldset>
+                <legend>Edit meal</legend>
+
+                <c:if test="${empty curMeal.id}"><input type="hidden" name="id" value="${null}"></c:if>
+                <c:if test="${not empty curMeal.id}"><input type="hidden" name="id" value="${curMeal.id}"></c:if>
+
+                <dl>
+                    <dt><label for="dateTime">Date&Time</label></dt>
+                    <dd><input id="dateTime" type="datetime-local" name="dateTime" value="${curMeal.dateTime}"
+                               size="20"></dd>
+                    <dt><label for="description">Description</label></dt>
+                    <dd><input id="description" type="text" name="description" value="${curMeal.description}" size="50">
+                    </dd>
+                    <dt><label for="calories">Calories</label></dt>
+                    <dd><input id="calories" type="number" name="calories" value="${curMeal.calories}"></dd>
+                </dl>
+
+                <button class="submit-button" type="submit">Save</button>
+                <a class="delete-button" href="meals?action=delete&id=${curMeal.id}">Delete</a>
+                <a class="cancel-button" href="meals">Cancel</a>
+            </fieldset>
+        </form>
+    </div>
+
+</c:if>
+
+<table class="meal-table">
     <thead>
     <tr>
         <th>Date</th>
         <th>Description</th>
         <th>Calories</th>
-        <th>Actions</th>
         <th></th>
     </tr>
     </thead>
     <jsp:useBean id="mealList" scope="request" type="java.util.List"/>
     <c:forEach items="${mealList}" var="meal">
         <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
-        <tr class="${meal.exceed ? "exceeded" : "normal"}">
+        <tr valign="top" class="${meal.exceed ? "exceeded" : "normal"}">
             <fmt:parseDate value="${meal.dateTime}" pattern="y-M-dd'T'H:m" var="parsedDate"/>
             <fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm" var="formatedDate"/>
-            <td>${formatedDate}</td>
-                <%--<td>${TimeUtil.timeToString(meal.dateTime)}</td>--%>
-            <td>${meal.description}</td>
-            <td>${meal.calories}</td>
-            <td><a href="meals?action=update&id=${meal.id}">Update</a></td>
-            <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
+            <td><a href="meals?action=update&id=${meal.id}">${formatedDate}</a></td>
+            <td width="250"><a href="meals?action=update&id=${meal.id}">${meal.description}</a></td>
+            <fmt:formatNumber value="${meal.calories}" var="formatedCalories" type="number"/>
+            <td><a href="meals?action=update&id=${meal.id}">${formatedCalories}</a></td>
         </tr>
     </c:forEach>
 

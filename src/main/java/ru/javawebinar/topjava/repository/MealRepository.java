@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Cepro on 11.09.2016.
  */
-public interface MealRepository {
+interface MealRepository {
     Meal save(Meal meal);
     void delete(long id);
     Meal getById(long id);
