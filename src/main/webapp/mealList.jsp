@@ -30,6 +30,14 @@
             text-decoration: none;
         }
 
+        td.datetime {
+            min-width: 8em;
+        }
+
+        td.description {
+            min-width: 12em;
+        }
+
         tr.meal-row {
             cursor: pointer;
         }
@@ -47,7 +55,8 @@
             margin: 0.5em 0;
             padding: 0;
             /*float: left;*/
-            width: 550px;
+            max-width: 31em;
+            min-width: 31em;
             color: #404040;
         }
 
@@ -60,7 +69,7 @@
 
         form dt {
             padding: 0;
-            margin: 0.7em 1em 0.5em 0;
+            margin: 0.6em 1em 0.5em 0;
             width: 14%;
             float: left;
             clear: left;
@@ -70,7 +79,7 @@
         form dd {
             margin: 0;
             padding: 0.5em 0;
-            width: 70%;
+            width: 80%;
             float: left;
             line-height: 1.5;
         }
@@ -80,13 +89,19 @@
             font-size: inherit;
             border: 1px solid #e8edff;
             color: inherit;
+            margin-left: 0.5em;
+        }
+
+        form.meal-form #description {
+            min-width: 100%;
+        }
+
+        form.meal-form .form-actions-block {
+            margin: 8em 0 0 5.5em;
         }
 
         form .submit-button {
             clear: left;
-            /*padding: 0.5em 0 1em 1.2em;*/
-            margin-left: 6em;
-            margin-top: 1em;
             font-size: inherit;
             font-family: inherit;
         }
@@ -127,8 +142,9 @@
 
         /*Form part end*/
 
-        .actions-block {
+        div.actions-block {
             padding: 0 0 1em 1em;
+            min-width: 20em;
         }
 
         .page-title {
@@ -141,9 +157,13 @@
             color: inherit;
         }
 
-        .action-create-span {
+        span.action-create {
             color: darkred;
             font-weight: bold;
+        }
+
+        span.action-populate {
+            color: #404040;
         }
 
     </style>
@@ -155,9 +175,9 @@
 <h2 class="nav-menu-block"><a href="./">Home</a></h2>
 <h2 class="page-title">Meal list</h2>
 <div class="actions-block">
-    <span class="action-create-span"><a class="action-create" href="meals?action=create">Add new meal</a></span> |
-    <span class="action-populate-span"><a class="actions-populate"
-                                          href="meals?action=populate">Populate new data</a></span>
+    <span class="action-create"><a class="action-create" href="meals?action=create">Add new meal</a></span> |
+    <span class="action-populate"><a class="actions-populate"
+                                     href="meals?action=populate">Populate new data</a></span>
 </div>
 <jsp:useBean id="isEditFormVisible" scope="request" type="java.lang.String"/>
 
@@ -168,27 +188,30 @@
 <c:if test="${curMeal != null}">
 
     <div class="editForm" style="display: ${isEditFormVisible};">
-        <form method="post" action="meals">
+        <form class="meal-form" method="post" action="meals">
             <fieldset>
                 <legend>Edit meal</legend>
 
-                <c:if test="${empty curMeal.id}"><input type="hidden" name="id" value="${null}"></c:if>
-                <c:if test="${not empty curMeal.id}"><input type="hidden" name="id" value="${curMeal.id}"></c:if>
+                <div class="form-fields-block">
+                    <c:if test="${empty curMeal.id}"><input type="hidden" name="id" value="${null}"></c:if>
+                    <c:if test="${not empty curMeal.id}"><input type="hidden" name="id" value="${curMeal.id}"></c:if>
 
-                <dl>
-                    <dt><label for="dateTime">Date&Time</label></dt>
-                    <dd><input id="dateTime" type="datetime-local" name="dateTime" value="${curMeal.dateTime}"
-                               size="20"></dd>
-                    <dt><label for="description">Description</label></dt>
-                    <dd><input id="description" type="text" name="description" value="${curMeal.description}" size="50">
-                    </dd>
-                    <dt><label for="calories">Calories</label></dt>
-                    <dd><input id="calories" type="number" name="calories" value="${curMeal.calories}"></dd>
-                </dl>
-
-                <button class="submit-button" type="submit">Save</button>
-                <a class="delete-button" href="meals?action=delete&id=${curMeal.id}">Delete</a>
-                <a class="cancel-button" href="meals">Cancel</a>
+                    <dl>
+                        <dt><label for="dateTime">Date&Time</label></dt>
+                        <dd><input id="dateTime" type="datetime-local" name="dateTime" value="${curMeal.dateTime}"></dd>
+                        <dt><label for="description">Description</label></dt>
+                        <dd><input class="description" id="description" type="text" name="description" value="${curMeal.description}"></dd>
+                        <dt><label for="calories">Calories</label></dt>
+                        <dd><input id="calories" type="number" name="calories" value="${curMeal.calories}"></dd>
+                    </dl>
+                </div>
+                <div class="form-actions-block">
+                    <button class="submit-button" type="submit">Save</button>
+                    <c:if test="${param.action != 'create'}">
+                        <a class="delete-button" href="meals?action=delete&id=${curMeal.id}">Delete</a>
+                    </c:if>
+                    <a class="cancel-button" href="meals">Cancel</a>
+                </div>
             </fieldset>
         </form>
     </div>
@@ -210,10 +233,10 @@
         <tr valign="top" class="meal-row ${meal.exceed ? "exceeded" : "normal"}">
             <fmt:parseDate value="${meal.dateTime}" pattern="y-M-dd'T'H:m" var="parsedDate"/>
             <fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm" var="formatedDate"/>
-            <td><a href="meals?action=update&id=${meal.id}">${formatedDate}</a></td>
-            <td width="250"><a href="meals?action=update&id=${meal.id}">${meal.description}</a></td>
+            <td class="datetime"><a href="meals?action=update&id=${meal.id}">${formatedDate}</a></td>
+            <td class="description"><a href="meals?action=update&id=${meal.id}">${meal.description}</a></td>
             <fmt:formatNumber value="${meal.calories}" var="formatedCalories" type="number"/>
-            <td><a href="meals?action=update&id=${meal.id}">${formatedCalories}</a></td>
+            <td class="calories"><a href="meals?action=update&id=${meal.id}">${formatedCalories}</a></td>
         </tr>
     </c:forEach>
 
