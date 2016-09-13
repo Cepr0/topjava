@@ -24,7 +24,7 @@ public class MealsUtil {
                 .collect(Collectors.toList());
     }
 
-    public static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
+    private static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
         MealWithExceed mealWithExceed = new MealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
         mealWithExceed.setId(meal.getId());
         return mealWithExceed;

@@ -13,6 +13,9 @@
             padding: 1em;
         }
 
+        table {
+            border-spacing: 0;
+        }
         th {
             font-weight: bold;
             text-transform: uppercase;
@@ -36,6 +39,7 @@
 
         td.description {
             min-width: 12em;
+            max-width: 16em;
         }
 
         tr.meal-row {
@@ -48,6 +52,10 @@
 
         tr.normal {
             color: green;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
         }
 
         /*Form part start*/
@@ -233,10 +241,10 @@
         <tr valign="top" class="meal-row ${meal.exceed ? "exceeded" : "normal"}">
             <fmt:parseDate value="${meal.dateTime}" pattern="y-M-dd'T'H:m" var="parsedDate"/>
             <fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm" var="formatedDate"/>
-            <td class="datetime"><a href="meals?action=update&id=${meal.id}">${formatedDate}</a></td>
-            <td class="description"><a href="meals?action=update&id=${meal.id}">${meal.description}</a></td>
+            <td onclick="location.href='meals?action=update&id=${meal.id}'" class="datetime">${formatedDate}</td>
+            <td onclick="location.href='meals?action=update&id=${meal.id}'" class="description">${meal.description}</td>
             <fmt:formatNumber value="${meal.calories}" var="formatedCalories" type="number"/>
-            <td class="calories"><a href="meals?action=update&id=${meal.id}">${formatedCalories}</a></td>
+            <td onclick="location.href='meals?action=update&id=${meal.id}'" class="calories">${formatedCalories}</td>
         </tr>
     </c:forEach>
 

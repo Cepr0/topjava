@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.web;
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.InMemoryMealRepositoryImpl;
+import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.TimeUtil;
 
@@ -15,21 +16,23 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-/**
- * Created by Cepro on 08.09.2016.
- */
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = getLogger(MealServlet.class);
-    private InMemoryMealRepositoryImpl repository;
+    private MealRepository repository;
 
     @Override
     public void init() throws ServletException {
         super.init();
         repository = new InMemoryMealRepositoryImpl();
+        IntStream.range(0, 3).forEach(i -> populate());
     }
 
     @Override
@@ -78,7 +81,8 @@ public class MealServlet extends HttpServlet {
                 delete(resp, id);
                 break;
             case "populate":
-                populate(resp);
+                populate();
+                resp.sendRedirect("meals");
                 break;
             default:
                 LOG.info("Get all meals...");
@@ -116,16 +120,25 @@ public class MealServlet extends HttpServlet {
         resp.sendRedirect("meals");
     }
 
-    private void populate(HttpServletResponse resp) throws IOException {
+    private void populate() {
         LOG.info("Populate new data...");
-        repository.populateData(TimeUtil.getRandomDate(LocalDate.of(2016, 1, 1), LocalDate.of(2016, 8, 31)));
-        resp.sendRedirect("meals");
+        ThreadLocalRandom r = ThreadLocalRandom.current();
+        LocalDate date = TimeUtil.getRandomDate(LocalDate.of(2016, 1, 1), LocalDate.of(2016, 8, 31));
+        repository.save(new Meal(LocalDateTime.of(date, LocalTime.of(r.nextInt(8, 12), 0)), "Завтрак", r.nextInt(300, 700)));
+        repository.save(new Meal(LocalDateTime.of(date, LocalTime.of(r.nextInt(12, 15), 0)), "Обед", r.nextInt(800, 1100)));
+        repository.save(new Meal(LocalDateTime.of(date, LocalTime.of(r.nextInt(18, 21), 0)), "Ужин", r.nextInt(300, 700)));
     }
 
     private void getAllMeals(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("mealList",
-                    MealsUtil.getFilteredWithExceeded(repository.getAllSortedByDate(), LocalTime.MIN, LocalTime.MAX, 2000));
+                    MealsUtil.getFilteredWithExceeded(getAllMealSortedByDate(), LocalTime.MIN, LocalTime.MAX, 2000));
         request.getRequestDispatcher("mealList.jsp").forward(request, response);
+    }
+
+    private List<Meal> getAllMealSortedByDate() {
+        return repository.getAll().stream()
+                .sorted((m1, m2) -> m1.getDateTime().compareTo(m2.getDateTime()))
+                .collect(Collectors.toList());
     }
 
     private Long getId(HttpServletRequest request) {
