@@ -6,8 +6,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class TimeUtil {
 
-    static boolean isBetween(LocalTime lt, LocalTime startTime, LocalTime endTime) {
+    public static boolean isBetween(LocalTime lt, LocalTime startTime, LocalTime endTime) {
         return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) <= 0;
+    }
+
+    public static boolean isBetween(LocalDate testedDate, LocalDate fromDate, LocalDate toDate) {
+        return testedDate.compareTo(fromDate) >= 0 && testedDate.compareTo(toDate) <= 0;
     }
 
     public static LocalDate getRandomDate(LocalDate start, LocalDate end) {

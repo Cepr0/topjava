@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.MealWithExceed;
 import ru.javawebinar.topjava.repository.InMemoryMealRepositoryImpl;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -21,16 +22,20 @@ import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = getLogger(MealServlet.class);
     private MealRepository repository;
+    private final int PAGE_SIZE = Integer.MAX_VALUE;
+    private long curPage = 1;
 
     @Override
     public void init() throws ServletException {
         super.init();
+        LOG.info("Servlet mealServlet initialized at {}", LocalDateTime.now().toString());
         repository = new InMemoryMealRepositoryImpl();
         IntStream.range(0, 3).forEach(i -> populate());
     }
@@ -62,10 +67,19 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("defaultLocale", Locale.getDefault().toString());
         req.setAttribute("isEditFormVisible", "none");
+
         String action = req.getParameter("action");
+        String pageStr = req.getParameter("page");
+
+        try {
+            curPage = Long.valueOf(pageStr);
+        } catch (NumberFormatException ignored) {
+        }
+
+        repository.setCurPage(curPage, PAGE_SIZE);
 
         if (action == null) {
-            getAllMeals(req, resp);
+            getMeals(req, resp);
             return;
         }
 
@@ -86,7 +100,7 @@ public class MealServlet extends HttpServlet {
                 break;
             default:
                 LOG.info("Get all meals...");
-                getAllMeals(req, resp);
+                getMeals(req, resp);
         }
     }
 
@@ -95,7 +109,7 @@ public class MealServlet extends HttpServlet {
         req.setAttribute("isEditFormVisible", "block");
         Meal curMeal = new Meal(LocalDateTime.of(LocalDate.now(), LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute())), "", 0);
         req.setAttribute("curMeal", curMeal);
-        getAllMeals(req, resp);
+        getMeals(req, resp);
     }
 
     private void update(HttpServletRequest req, HttpServletResponse resp, Long id) throws ServletException, IOException {
@@ -107,7 +121,7 @@ public class MealServlet extends HttpServlet {
         } else {
             LOG.warn("Couldn't edit meal with null or incorrect ID");
         }
-        getAllMeals(req, resp);
+        getMeals(req, resp);
     }
 
     private void delete(HttpServletResponse resp, Long id) throws IOException {
@@ -129,21 +143,23 @@ public class MealServlet extends HttpServlet {
         repository.save(new Meal(LocalDateTime.of(date, LocalTime.of(r.nextInt(18, 21), 0)), "Ужин", r.nextInt(300, 700)));
     }
 
-    private void getAllMeals(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("mealList",
-                    MealsUtil.getFilteredWithExceeded(getAllMealSortedByDate(), LocalTime.MIN, LocalTime.MAX, 2000));
-        request.getRequestDispatcher("mealList.jsp").forward(request, response);
+    private void getMeals(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<MealWithExceed> mealList = MealsUtil.getFilteredWithExceeded(repository.getAllSortedByDate(), LocalTime.MIN, LocalTime.MAX, 2000);
+        req.setAttribute("mealList", mealList);
+        req.setAttribute("curPage", curPage);
+        req.setAttribute("pageList", getPages());
+
+        req.getRequestDispatcher("mealList.jsp").forward(req, resp);
     }
 
-    private List<Meal> getAllMealSortedByDate() {
-        return repository.getAll().stream()
-                .sorted((m1, m2) -> m1.getDateTime().compareTo(m2.getDateTime()))
-                .collect(Collectors.toList());
+    private List<Long> getPages() {
+        long pagesCount = ((long) Math.ceil(repository.count() / PAGE_SIZE));
+        return LongStream.range(0, pagesCount + 1).boxed().collect(Collectors.toList());
     }
 
-    private Long getId(HttpServletRequest request) {
+    private Long getId(HttpServletRequest req) {
         try {
-            return Long.valueOf(request.getParameter("id"));
+            return Long.valueOf(req.getParameter("id"));
         } catch (NumberFormatException e) {
             return null;
         }

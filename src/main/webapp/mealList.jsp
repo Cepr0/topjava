@@ -54,7 +54,7 @@
             color: green;
         }
 
-        tr:hover {
+        tr.meal-row:hover {
             background-color: #f5f5f5;
         }
 
