@@ -9,11 +9,8 @@ import java.util.Collection;
  * 06.03.2015.
  */
 public interface MealRepository {
-    Meal save(Meal Meal);
-
-    void delete(int id);
-
-    Meal get(int id);
-
-    Collection<Meal> getAll();
+    Meal save(Meal meal, int userId);
+    boolean delete(int mealId, int userId);
+    Meal get(int mealId, int userId);
+    Collection<Meal> getAll(int userId);
 }

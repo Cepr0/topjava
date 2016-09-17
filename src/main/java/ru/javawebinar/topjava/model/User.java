@@ -13,15 +13,10 @@ import java.util.Set;
 public class User extends NamedEntity {
 
     protected String email;
-
     protected String password;
-
     protected boolean enabled = true;
-
     protected Date registered = new Date();
-
     protected Set<Role> roles;
-
     protected int caloriesPerDay = MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
     public User() {

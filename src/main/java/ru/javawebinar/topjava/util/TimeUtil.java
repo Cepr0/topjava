@@ -1,8 +1,10 @@
 package ru.javawebinar.topjava.util;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * GKislin
@@ -17,5 +19,14 @@ public class TimeUtil {
 
     public static String toString(LocalDateTime ldt) {
         return ldt == null ? "" : ldt.format(DATE_TME_FORMATTER);
+    }
+
+    public static LocalDate getRandomDate(LocalDate start, LocalDate end) {
+        ThreadLocalRandom r = ThreadLocalRandom.current();
+        try {
+            return LocalDate.ofEpochDay(r.nextLong(start.toEpochDay(), end.toEpochDay()));
+        } catch (Exception e) {
+            return start;
+        }
     }
 }
