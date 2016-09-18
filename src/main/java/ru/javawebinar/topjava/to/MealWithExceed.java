@@ -2,8 +2,6 @@ package ru.javawebinar.topjava.to;
 
 import ru.javawebinar.topjava.model.Meal;
 
-import java.time.LocalDateTime;
-
 /**
  * GKislin
  * 11.01.2015.
@@ -11,8 +9,8 @@ import java.time.LocalDateTime;
 public class MealWithExceed extends Meal {
     private final boolean exceed;
 
-    public MealWithExceed(Integer id, LocalDateTime dateTime, String description, int calories, boolean exceed) {
-        super(id, dateTime, description, calories);
+    public MealWithExceed(Meal meal, boolean exceed) {
+        super(meal.getId(), meal.getUserId(), meal.getDateTime(), meal.getDescription(), meal.getCalories());
         this.exceed = exceed;
     }
 
