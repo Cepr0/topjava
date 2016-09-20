@@ -36,14 +36,11 @@
         <input type="hidden" name="form" value="filter">
         <dl>
             <dt>From date:</dt>
-            <%--<%request.getParameter("fromDate");%>--%>
             <c:set var="fromDate" scope="session" value="${fromDate}"/>
             <dd><input type="date" value="${fromDate}" name="fromDate"></dd>
-            <%--<%session.setAttribute("fromDate", request.getParameter("fromDate"));%>--%>
             <dt>To date:</dt>
             <c:set var="toDate" scope="session" value="${toDate}"/>
             <dd><input type="date" value="${toDate}" name="toDate"></dd>
-            <%--<%session.setAttribute("toDate", request.getParameter("toDate"));%>--%>
         </dl>
         <dl>
             <dt>From  time:</dt>
@@ -53,7 +50,8 @@
             <c:set var="toTime" scope="session" value="${toTime}"/>
             <dd><input type="time" value="${toTime}" name="toTime"></dd>
         </dl>
-        <button type="submit">Filter</button>
+        <button type="submit" name="filter">Filter</button>
+        <button type="submit" name="reset">Reset</button>
     </form>
     <hr>
     <a href="meals?action=create">Add Meal</a>

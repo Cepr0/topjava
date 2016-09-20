@@ -71,10 +71,19 @@ public class MealServlet extends HttpServlet {
                 break;
 
             default:
-                request.getSession().setAttribute("fromDate", request.getParameter("fromDate"));
-                request.getSession().setAttribute("toDate", request.getParameter("toDate"));
-                request.getSession().setAttribute("fromTime", request.getParameter("fromTime"));
-                request.getSession().setAttribute("toTime", request.getParameter("toTime"));
+                if (request.getParameter("filter") != null) {
+                    request.getSession().setAttribute("fromDate", request.getParameter("fromDate"));
+                    request.getSession().setAttribute("toDate", request.getParameter("toDate"));
+                    request.getSession().setAttribute("fromTime", request.getParameter("fromTime"));
+                    request.getSession().setAttribute("toTime", request.getParameter("toTime"));
+                }
+
+                if (request.getParameter("reset") != null) {
+                    request.getSession().setAttribute("fromDate", null);
+                    request.getSession().setAttribute("toDate", null);
+                    request.getSession().setAttribute("fromTime", null);
+                    request.getSession().setAttribute("toTime", null);
+                }
         }
         response.sendRedirect("meals");
     }
