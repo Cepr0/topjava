@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.TimeUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -45,12 +44,13 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String form = request.getParameter("form");
+        int userId = (int) request.getSession().getAttribute("userId");
 
         switch (form) {
             case "edit":
                 String id = request.getParameter("id");
                 Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-                        AuthorizedUser.id(),
+                        userId,
                         LocalDateTime.parse(request.getParameter("dateTime")),
                         request.getParameter("description"),
                         Integer.valueOf(request.getParameter("calories")));
@@ -85,11 +85,12 @@ public class MealServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+        int userId = (int) request.getSession().getAttribute("userId");
 
         if (action == null) {
             LOG.info("getAll");
             request.setAttribute("mealList",
-                    mealController.getWithFilter(AuthorizedUser.id(),
+                    mealController.getWithFilter(userId,
                             TimeUtil.parseDate((String) request.getSession().getAttribute("fromDate")),
                             TimeUtil.parseDate((String) request.getSession().getAttribute("toDate")),
                             TimeUtil.parseTime((String) request.getSession().getAttribute("fromTime")),
