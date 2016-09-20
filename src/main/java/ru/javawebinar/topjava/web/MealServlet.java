@@ -44,7 +44,11 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String form = request.getParameter("form");
-        int userId = (int) request.getSession().getAttribute("userId");
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
+        if (userId == null) {
+            response.sendRedirect("./");
+            return;
+        }
 
         switch (form) {
             case "edit":
@@ -85,7 +89,11 @@ public class MealServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        int userId = (int) request.getSession().getAttribute("userId");
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
+        if (userId == null) {
+            response.sendRedirect("./");
+            return;
+        }
 
         if (action == null) {
             LOG.info("getAll");
