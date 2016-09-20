@@ -9,9 +9,22 @@
         .normal {
             color: green;
         }
-
         .exceeded {
             color: red;
+        }
+        dl {
+            margin: 8px 0;
+            padding: 0;
+        }
+        dt {
+            display: inline-block;
+            /*width: 30px;*/
+        }
+        dd {
+            display: inline-block;
+            margin-left: 10px;
+            margin-right: 15px;
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -19,8 +32,32 @@
 <section>
     <h2><a href="index.html">Home</a></h2>
     <h3>Meal list</h3>
-    <a href="meals?action=create">Add Meal</a>
+    <form method="post" action="meals">
+        <input type="hidden" name="form" value="filter">
+        <dl>
+            <dt>From date:</dt>
+            <%--<%request.getParameter("fromDate");%>--%>
+            <c:set var="fromDate" scope="session" value="${fromDate}"/>
+            <dd><input type="date" value="${fromDate}" name="fromDate"></dd>
+            <%--<%session.setAttribute("fromDate", request.getParameter("fromDate"));%>--%>
+            <dt>To date:</dt>
+            <c:set var="toDate" scope="session" value="${toDate}"/>
+            <dd><input type="date" value="${toDate}" name="toDate"></dd>
+            <%--<%session.setAttribute("toDate", request.getParameter("toDate"));%>--%>
+        </dl>
+        <dl>
+            <dt>From  time:</dt>
+            <c:set var="fromTime" scope="session" value="${fromTime}"/>
+            <dd><input type="time" value="${fromTime}" name="fromTime"></dd>
+            <dt>To time:</dt>
+            <c:set var="toTime" scope="session" value="${toTime}"/>
+            <dd><input type="time" value="${toTime}" name="toTime"></dd>
+        </dl>
+        <button type="submit">Filter</button>
+    </form>
     <hr>
+    <a href="meals?action=create">Add Meal</a>
+    <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>

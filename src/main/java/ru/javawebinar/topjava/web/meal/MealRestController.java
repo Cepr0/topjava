@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.to.MealWithExceed;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -42,8 +43,8 @@ public class MealRestController {
         return service.getAll(userId);
     }
 
-    public List<Meal> getAllWithFilter(int userId, LocalDate fromDate, LocalDate toDate, LocalTime fromTime, LocalTime toTime) {
+    public List<MealWithExceed> getWithFilter(int userId, LocalDate fromDate, LocalDate toDate, LocalTime fromTime, LocalTime toTime) {
         LOG.info("get all with filter meal for user ID: " + userId);
-        return service.getAllWithFilter(userId, fromDate, toDate, fromTime, toTime);
+        return service.getWithFilter(userId, fromDate, toDate, fromTime, toTime);
     }
 }

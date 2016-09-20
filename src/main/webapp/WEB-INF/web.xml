@@ -24,5 +24,14 @@
         <servlet-name>mealServlet</servlet-name>
         <url-pattern>/meals</url-pattern>
     </servlet-mapping>
+    <!---->
+    <!--<filter>-->
+        <!--<filter-name>mealServletFilter</filter-name>-->
+        <!--<filter-class>ru.javawebinar.topjava.web.MealServlet</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>mealServletFilter</filter-name>-->
+        <!--<url-pattern>/meals</url-pattern>-->
+    <!--</filter-mapping>-->
 
 </web-app>

@@ -11,18 +11,24 @@ import java.util.concurrent.ThreadLocalRandom;
  * 07.01.2015.
  */
 public class TimeUtil {
-    public static final DateTimeFormatter DATE_TME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DATE_TME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final LocalDate DEFAULT_START_DATE = LocalDate.of(1900, 1, 1);
+    private static final LocalDate DEFAULT_END_DATE = LocalDate.of(3000, 1, 1);
 
-    public static boolean isBetween(LocalTime lt, LocalTime startTime, LocalTime endTime) {
-        return lt.compareTo(startTime) >= 0 && lt.compareTo(endTime) <= 0;
+    public static boolean isBetween(LocalTime testedTime, LocalTime startTime, LocalTime endTime) {
+        startTime = (startTime != null) ? startTime : LocalTime.MIN;
+        endTime = (endTime != null) ? endTime : LocalTime.MAX;
+        return testedTime.compareTo(startTime) >= 0 && testedTime.compareTo(endTime) <= 0;
     }
 
-    public static boolean isBetween(LocalDate ld, LocalDate startDate, LocalDate endDate) {
-        return ld.compareTo(startDate) >= 0 && ld.compareTo(endDate) <= 0;
+    public static boolean isBetween(LocalDate testedDate, LocalDate startDate, LocalDate endDate) {
+        startDate = (startDate != null) ? startDate : DEFAULT_START_DATE;
+        endDate = (endDate != null) ? endDate : DEFAULT_END_DATE;
+        return testedDate.compareTo(startDate) >= 0 && testedDate.compareTo(endDate) <= 0;
     }
 
-    public static String toString(LocalDateTime ldt) {
-        return ldt == null ? "" : ldt.format(DATE_TME_FORMATTER);
+    public static String toString(LocalDateTime dateTime) {
+        return dateTime == null ? "" : dateTime.format(DATE_TME_FORMATTER);
     }
 
     public static LocalDate getRandomDate(LocalDate start, LocalDate end) {
@@ -31,6 +37,22 @@ public class TimeUtil {
             return LocalDate.ofEpochDay(r.nextLong(start.toEpochDay(), end.toEpochDay()));
         } catch (Exception e) {
             return start;
+        }
+    }
+
+    public static LocalDate parseDate(String date) {
+        try {
+            return LocalDate.parse(date);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static LocalTime parseTime(String time) {
+        try {
+            return LocalTime.parse(time);
+        } catch (Exception e) {
+            return null;
         }
     }
 }

@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Repository
 public class InMemoryMealRepositoryImpl implements MealRepository {
@@ -30,10 +31,13 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     private void populate(int userId) {
         ThreadLocalRandom r = ThreadLocalRandom.current();
-        LocalDate date = TimeUtil.getRandomDate(LocalDate.of(2016, 9, 1), LocalDate.of(2016, 9, 17));
-        save(new Meal(userId, LocalDateTime.of(date, LocalTime.of(r.nextInt(8, 12), 0)), "Завтрак", r.nextInt(300, 700)));
-        save(new Meal(userId, LocalDateTime.of(date, LocalTime.of(r.nextInt(12, 15), 0)), "Обед", r.nextInt(800, 1100)));
-        save(new Meal(userId, LocalDateTime.of(date, LocalTime.of(r.nextInt(18, 21), 0)), "Ужин", r.nextInt(300, 700)));
+        int from = r.nextInt(1, 15);
+        IntStream.range(from, from + 3).forEach(i -> {
+            LocalDate date = LocalDate.of(2016, 9, i);
+            save(new Meal(userId, LocalDateTime.of(date, LocalTime.of(r.nextInt(8, 12), 0)), "Завтрак", r.nextInt(300, 700)));
+            save(new Meal(userId, LocalDateTime.of(date, LocalTime.of(r.nextInt(12, 15), 0)), "Обед", r.nextInt(800, 1100)));
+            save(new Meal(userId, LocalDateTime.of(date, LocalTime.of(r.nextInt(18, 21), 0)), "Ужин", r.nextInt(300, 700)));
+        });
     }
 
     @Override
@@ -64,11 +68,10 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public List<Meal> getAllWithFilter(int userId, LocalDate fromDate, LocalDate toDate, LocalTime fromTime, LocalTime toTime) {
+    public List<Meal> getWithFilter(int userId, LocalDate fromDate, LocalDate toDate) {
         return repository.values().stream()
                 .filter(meal -> meal.getUserId() == userId
-                                && TimeUtil.isBetween(meal.getDate(), fromDate, toDate)
-                                && TimeUtil.isBetween(meal.getTime(), fromTime, toTime))
+                                && TimeUtil.isBetween(meal.getDate(), fromDate, toDate))
                 .sorted((m1, m2) -> m2.getDateTime().compareTo(m1.getDateTime()))
                 .collect(Collectors.toList());
     }

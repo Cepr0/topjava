@@ -15,5 +15,5 @@ public interface MealRepository {
     boolean delete(int mealId);
     Meal get(int mealId);
     List<Meal> getAll(int userId);
-    List<Meal> getAllWithFilter(int userId, LocalDate fromDate, LocalDate toDate, LocalTime fromTime, LocalTime toTime);
+    List<Meal> getWithFilter(int userId, LocalDate fromDate, LocalDate toDate);
 }

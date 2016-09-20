@@ -4,21 +4,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.TimeUtil;
 import ru.javawebinar.topjava.util.exception.ExceptionUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MealServiceImpl implements MealService {
 
     private MealRepository repository;
+    private UserRepository userRepository;
 
     @Autowired
     public void setRepository(MealRepository repository) {
         this.repository = repository;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -42,7 +53,11 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public List<Meal> getAllWithFilter(int userId, LocalDate fromDate, LocalDate toDate, LocalTime fromTime, LocalTime toTime) {
-        return repository.getAllWithFilter(userId, fromDate, toDate, fromTime, toTime);
+    public List<MealWithExceed> getWithFilter(int userId, LocalDate fromDate, LocalDate toDate, LocalTime fromTime, LocalTime toTime) {
+        return MealsUtil.getWithExceeded(repository.getWithFilter(userId, fromDate, toDate)
+                , userRepository.get(userId).getCaloriesPerDay())
+                .stream()
+                .filter(meal -> TimeUtil.isBetween(meal.getTime(), fromTime, toTime))
+                .collect(Collectors.toList());
     }
 }
