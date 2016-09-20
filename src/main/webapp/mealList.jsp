@@ -5,6 +5,7 @@
 <html>
 <head>
     <title>Meal list</title>
+    <link rel="stylesheet" href="css/style.css">
     <style>
         .normal {
             color: green;
@@ -12,25 +13,25 @@
         .exceeded {
             color: red;
         }
-        dl {
-            margin: 8px 0;
-            padding: 0;
-        }
-        dt {
-            display: inline-block;
-            /*width: 30px;*/
-        }
-        dd {
-            display: inline-block;
-            margin-left: 10px;
-            margin-right: 15px;
-            vertical-align: middle;
-        }
+        /*dl {*/
+            /*margin: 8px 0;*/
+            /*padding: 0;*/
+        /*}*/
+        /*dt {*/
+            /*display: inline-block;*/
+            /*!*width: 30px;*!*/
+        /*}*/
+        /*dd {*/
+            /*display: inline-block;*/
+            /*margin-left: 10px;*/
+            /*margin-right: 15px;*/
+            /*vertical-align: middle;*/
+        /*}*/
     </style>
 </head>
 <body>
 <section>
-    <h2><a href="index.html">Home</a></h2>
+    <h2><a href=".">Home</a></h2>
     <h3>Meal list</h3>
     <form method="post" action="meals">
         <input type="hidden" name="form" value="filter">
@@ -50,8 +51,8 @@
             <c:set var="toTime" scope="session" value="${toTime}"/>
             <dd><input type="time" value="${toTime}" name="toTime"></dd>
         </dl>
-        <button type="submit" name="filter">Filter</button>
-        <button type="submit" name="reset">Reset</button>
+        <button type="submit" name="state" value="ok">Filter</button>
+        <button type="submit" name="state" value="reset">Reset</button>
     </form>
     <hr>
     <a href="meals?action=create">Add Meal</a>

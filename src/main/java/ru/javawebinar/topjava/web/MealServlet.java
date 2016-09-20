@@ -2,8 +2,7 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ru.javawebinar.topjava.AppContextListener;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.TimeUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
@@ -15,109 +14,103 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(MealServlet.class);
-    private ConfigurableApplicationContext appCtx;
     private MealRestController mealController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-
-        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
-        String[] beanDefinitionNames = appCtx.getBeanDefinitionNames();
-        System.err.println("Bean definition names:");
-        Arrays.stream(beanDefinitionNames).forEach(System.err::println);
-
-        mealController = appCtx.getBean(MealRestController.class);
+        mealController = AppContextListener.context.getBean(MealRestController.class);
     }
 
-    @Override
-    public void destroy() {
-        appCtx.close();
-        super.destroy();
-    }
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        String form = request.getParameter("form");
-        Integer userId = (Integer) request.getSession().getAttribute("userId");
+        Integer userId = (Integer) req.getSession().getAttribute("userId");
         if (userId == null) {
-            response.sendRedirect("./");
+            resp.sendRedirect("./");
             return;
         }
 
+        String state = req.getParameter("state");
+        if(state == null || state.equals("cancel")) {
+            resp.sendRedirect("meals");
+            return;
+        }
+
+        String form = req.getParameter("form");
         switch (form) {
-            case "edit":
-                String id = request.getParameter("id");
+            case "edit": // edit meal form
+                String id = req.getParameter("id");
                 Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                         userId,
-                        LocalDateTime.parse(request.getParameter("dateTime")),
-                        request.getParameter("description"),
-                        Integer.valueOf(request.getParameter("calories")));
+                        LocalDateTime.parse(req.getParameter("dateTime")),
+                        req.getParameter("description"),
+                        Integer.valueOf(req.getParameter("calories")));
 
                 if (meal.isNew()) {
                     String date = String.valueOf(meal.getDate());
-                    request.getSession().setAttribute("fromDate", date);
-                    request.getSession().setAttribute("toDate", date);
+                    req.getSession().setAttribute("fromDate", date);
+                    req.getSession().setAttribute("toDate", date);
                 }
 
                 LOG.info(meal.isNew() ? "Create {}" : "Update {}", meal);
                 mealController.save(meal);
                 break;
 
-            default:
-                if (request.getParameter("filter") != null) {
-                    request.getSession().setAttribute("fromDate", request.getParameter("fromDate"));
-                    request.getSession().setAttribute("toDate", request.getParameter("toDate"));
-                    request.getSession().setAttribute("fromTime", request.getParameter("fromTime"));
-                    request.getSession().setAttribute("toTime", request.getParameter("toTime"));
+            default: // filter form
+                if (state.equals("ok")) {
+                    req.getSession().setAttribute("fromDate", req.getParameter("fromDate"));
+                    req.getSession().setAttribute("toDate", req.getParameter("toDate"));
+                    req.getSession().setAttribute("fromTime", req.getParameter("fromTime"));
+                    req.getSession().setAttribute("toTime", req.getParameter("toTime"));
                 }
 
-                if (request.getParameter("reset") != null) {
-                    request.getSession().setAttribute("fromDate", null);
-                    request.getSession().setAttribute("toDate", null);
-                    request.getSession().setAttribute("fromTime", null);
-                    request.getSession().setAttribute("toTime", null);
+                if (state.equals("reset")) {
+                    req.getSession().setAttribute("fromDate", null);
+                    req.getSession().setAttribute("toDate", null);
+                    req.getSession().setAttribute("fromTime", null);
+                    req.getSession().setAttribute("toTime", null);
                 }
         }
-        response.sendRedirect("meals");
+        resp.sendRedirect("meals");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String action = request.getParameter("action");
-        Integer userId = (Integer) request.getSession().getAttribute("userId");
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("action");
+
+        Integer userId = (Integer) req.getSession().getAttribute("userId");
         if (userId == null) {
-            response.sendRedirect("./");
+            resp.sendRedirect("./");
             return;
         }
 
         if (action == null) {
             LOG.info("getAll");
-            request.setAttribute("mealList",
+            req.setAttribute("mealList",
                     mealController.getWithFilter(userId,
-                            TimeUtil.parseDate((String) request.getSession().getAttribute("fromDate")),
-                            TimeUtil.parseDate((String) request.getSession().getAttribute("toDate")),
-                            TimeUtil.parseTime((String) request.getSession().getAttribute("fromTime")),
-                            TimeUtil.parseTime((String) request.getSession().getAttribute("toTime"))));
+                            TimeUtil.parseDate((String) req.getSession().getAttribute("fromDate")),
+                            TimeUtil.parseDate((String) req.getSession().getAttribute("toDate")),
+                            TimeUtil.parseTime((String) req.getSession().getAttribute("fromTime")),
+                            TimeUtil.parseTime((String) req.getSession().getAttribute("toTime"))));
 
-            request.getRequestDispatcher("mealList.jsp").forward(request, response);
+            req.getRequestDispatcher("mealList.jsp").forward(req, resp);
 
         } else if ("delete".equals(action)) {
-            int id = getId(request);
+            int id = getId(req);
             LOG.info("Delete {}", id);
             mealController.delete(id);
-            response.sendRedirect("meals");
+            resp.sendRedirect("meals");
 
         } else if ("create".equals(action) || "update".equals(action)) {
             final Meal meal = action.equals("create") ?
                     new Meal(LocalDateTime.now().withNano(0).withSecond(0), "", 1000) :
-                    mealController.get(getId(request));
-            request.setAttribute("meal", meal);
-            request.getRequestDispatcher("mealEdit.jsp").forward(request, response);
+                    mealController.get(getId(req));
+            req.setAttribute("meal", meal);
+            req.getRequestDispatcher("mealEdit.jsp").forward(req, resp);
         }
     }
 
