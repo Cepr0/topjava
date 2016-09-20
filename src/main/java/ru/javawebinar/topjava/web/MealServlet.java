@@ -19,15 +19,10 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
 
-/**
- * User: gkislin
- * Date: 19.08.2014
- */
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(MealServlet.class);
     private ConfigurableApplicationContext appCtx;
     private MealRestController mealController;
-//    private ProfileRestController userController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -39,7 +34,6 @@ public class MealServlet extends HttpServlet {
         Arrays.stream(beanDefinitionNames).forEach(System.err::println);
 
         mealController = appCtx.getBean(MealRestController.class);
-//        userController = appCtx.getBean(ProfileRestController.class);
     }
 
     @Override
@@ -61,13 +55,14 @@ public class MealServlet extends HttpServlet {
                         request.getParameter("description"),
                         Integer.valueOf(request.getParameter("calories")));
 
+                if (meal.isNew()) {
+                    String date = String.valueOf(meal.getDate());
+                    request.getSession().setAttribute("fromDate", date);
+                    request.getSession().setAttribute("toDate", date);
+                }
+
                 LOG.info(meal.isNew() ? "Create {}" : "Update {}", meal);
                 mealController.save(meal);
-
-                String date = String.valueOf(meal.getDate());
-                request.getSession().setAttribute("fromDate", date);
-                request.getSession().setAttribute("toDate", date);
-
                 break;
 
             default:
