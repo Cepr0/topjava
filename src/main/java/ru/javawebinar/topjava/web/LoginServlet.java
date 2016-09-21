@@ -27,6 +27,10 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         req.getSession().setAttribute("userId", Integer.valueOf(req.getParameter("userId")));
+        req.getSession().setAttribute("fromDate", null);
+        req.getSession().setAttribute("toDate", null);
+        req.getSession().setAttribute("fromTime", null);
+        req.getSession().setAttribute("toTime", null);
         resp.sendRedirect("meals");
     }
 

@@ -100,22 +100,41 @@ public class MealServlet extends HttpServlet {
             req.getRequestDispatcher("mealList.jsp").forward(req, resp);
 
         } else if ("delete".equals(action)) {
-            int id = getId(req);
-            LOG.info("Delete {}", id);
-            mealController.delete(id);
+            Integer mealId = null;
+            try {
+                mealId = getId(req);
+                LOG.info("Delete {}", mealId);
+                mealController.delete(mealId, userId);
+            } catch (Exception e) {
+                LOG.error(String.format("Could not perform deleting - a meal with id %d is not found!", mealId));
+                req.setAttribute("errorMsg", "Ups! A meal is not found!");
+                req.getRequestDispatcher("error.jsp").forward(req, resp);
+                return;
+            }
+
             resp.sendRedirect("meals");
 
         } else if ("create".equals(action) || "update".equals(action)) {
-            final Meal meal = action.equals("create") ?
-                    new Meal(LocalDateTime.now().withNano(0).withSecond(0), "", 1000) :
-                    mealController.get(getId(req));
+            Meal meal;
+
+            try {
+                meal = action.equals("create") ?
+                        new Meal(LocalDateTime.now().withNano(0).withSecond(0), "", 1000) :
+                        mealController.get(getId(req), userId);
+            } catch (Exception e) {
+                LOG.error("Could not perform updating - a meal is not found!");
+                req.setAttribute("errorMsg", "Ups! A meal is not found!");
+                req.getRequestDispatcher("error.jsp").forward(req, resp);
+                return;
+            }
+
             req.setAttribute("meal", meal);
             req.getRequestDispatcher("mealEdit.jsp").forward(req, resp);
         }
     }
 
-    private int getId(HttpServletRequest request) {
-        String paramId = Objects.requireNonNull(request.getParameter("id"));
+    private int getId(HttpServletRequest req) {
+        String paramId = Objects.requireNonNull(req.getParameter("id"));
         return Integer.valueOf(paramId);
     }
 }

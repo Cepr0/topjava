@@ -24,27 +24,37 @@ public class MealRestController {
     }
 
     public Meal save(Meal meal) {
-        LOG.info("save " + meal);
+        LOG.info(String.format("save %s", meal));
         return service.save(meal);
     }
 
     public void delete(int mealId) {
-        LOG.info("delete meal with ID: " + mealId);
+        LOG.info(String.format("delete meal with ID: %d", mealId));
         service.delete(mealId);
     }
 
+    public void delete(int mealId, int userId) {
+        LOG.info(String.format("delete meal with ID: %d for user with ID: %d", mealId, userId));
+        service.delete(mealId, userId);
+    }
+
     public Meal get(int mealId) {
-        LOG.info("get meal ID: " + mealId);
+        LOG.info(String.format("get meal ID: %d", mealId));
         return service.get(mealId);
     }
 
+    public Meal get(int mealId, int userId) {
+        LOG.info(String.format("get meal ID: %d for user with ID: %d", mealId, userId));
+        return service.get(mealId, userId);
+    }
+
     public List<Meal> getAll(int userId) {
-        LOG.info("get all meal for user ID: " + userId);
+        LOG.info(String.format("get all meal for user ID: %d", userId));
         return service.getAll(userId);
     }
 
     public List<MealWithExceed> getWithFilter(int userId, LocalDate fromDate, LocalDate toDate, LocalTime fromTime, LocalTime toTime) {
-        LOG.info("get all with filter meal for user ID: " + userId);
+        LOG.info(String.format("get all with filter meal for user ID: %d", userId));
         return service.getWithFilter(userId, fromDate, toDate, fromTime, toTime);
     }
 }

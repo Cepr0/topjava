@@ -43,8 +43,20 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
+    public void delete(int mealId, int userId) throws NotFoundException {
+        ExceptionUtil.checkNotFoundWithId((repository.get(mealId).getUserId() == userId), mealId);
+        repository.delete(mealId);
+    }
+
+    @Override
     public Meal get(int mealId) throws NotFoundException {
         return ExceptionUtil.checkNotFoundWithId(repository.get(mealId), mealId);
+    }
+
+    @Override
+    public Meal get(int mealId, int userId) throws NotFoundException {
+        ExceptionUtil.checkNotFoundWithId((repository.get(mealId).getUserId() == userId), mealId);
+        return repository.get(mealId);
     }
 
     @Override
