@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import ru.javawebinar.topjava.AppContextListener;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.TimeUtil;
@@ -88,7 +89,7 @@ public class MealServlet extends HttpServlet {
             return;
         }
 
-        if (action == null) {
+        if (StringUtils.isEmpty(action)) {
             LOG.info("getAll");
             req.setAttribute("mealList",
                     mealController.getWithFilter(userId,
