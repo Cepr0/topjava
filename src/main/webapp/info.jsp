@@ -1,17 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>TopJava Calories Manager - Error</title>
+    <title>TopJava Calories Manager - Info</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <h2>Calories Manager</h2>
 <a href="https://github.com/JavaWebinar/topjava08" target="_blank">Java Enterprise (Topjava) 2016</a>
 <br><br>
-<h2><a href="meals">Back</a></h2>
+<a onclick="window.history.back()" href="#">Back</a>
 <hr>
-<h2>Error</h2>
-<jsp:useBean id="errorMsg" scope="request" type="java.lang.String"/>
-<p>${errorMsg}</p>
+<jsp:useBean id="message" scope="request" type="java.lang.String"/>
+<p>${message}</p>
 </body>
 </html>

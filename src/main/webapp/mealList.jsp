@@ -31,7 +31,12 @@
 </head>
 <body>
 <section>
-    <h2><a href=".">Home</a></h2>
+    <span><a href=".">Log out</a></span>
+    <jsp:useBean id="isAdmin" scope="session" type="java.lang.Boolean"/>
+    <c:if test="${isAdmin}" var="true">
+        <span> | <a href="users">Users</a></span>
+    </c:if>
+
     <h3>Meal list</h3>
     <form method="post" action="meals">
         <input type="hidden" name="form" value="filter">

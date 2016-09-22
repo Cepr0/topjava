@@ -16,10 +16,14 @@ public class User extends NamedEntity {
     protected String password;
     protected boolean enabled = true;
     protected Date registered = new Date();
-    protected Set<Role> roles;
+    protected Set<Role> roles = EnumSet.of(Role.ROLE_USER);
     protected int caloriesPerDay = MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
     public User() {
+    }
+
+    public User(Integer id, String name, String email, String password, int caloriesPerDay, Role role) {
+        this(id, name, email, password, caloriesPerDay, true, EnumSet.of(role));
     }
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
@@ -73,6 +77,10 @@ public class User extends NamedEntity {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public Role getRole() {
+        return roles.stream().findFirst().orElse(null);
     }
 
     public String getPassword() {

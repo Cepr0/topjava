@@ -21,12 +21,12 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        save(new User(1, "Admin", "admin@topjava.ru", "", Role.ROLE_ADMIN));
-        save(new User(2, "User1", "user1@topjava.ru", "", Role.ROLE_USER));
-        save(new User(3, "User2", "user2@topjava.ru", "", Role.ROLE_USER));
-        save(new User(4, "User3", "user3@topjava.ru", "", Role.ROLE_USER));
-        save(new User(5, "User4", "user4@topjava.ru", "", Role.ROLE_USER));
-        save(new User(6, "User5", "user5@topjava.ru", "", Role.ROLE_USER));
+        save(new User(null, "Admin", "admin@topjava.ru", "", Role.ROLE_ADMIN));
+        save(new User(null, "User1", "user1@topjava.ru", "", Role.ROLE_USER));
+        save(new User(null, "User2", "user2@topjava.ru", "", Role.ROLE_USER));
+        save(new User(null, "User3", "user3@topjava.ru", "", Role.ROLE_USER));
+        save(new User(null, "User4", "user4@topjava.ru", "", Role.ROLE_USER));
+        save(new User(null, "User5", "user5@topjava.ru", "", Role.ROLE_USER));
     }
 
     @Override

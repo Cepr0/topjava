@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Optional;
 
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(MealServlet.class);
@@ -36,8 +37,8 @@ public class MealServlet extends HttpServlet {
             return;
         }
 
-        String state = req.getParameter("state");
-        if(state == null || state.equals("cancel")) {
+        String state = Optional.ofNullable(req.getParameter("state")).orElse("cancel");
+        if(state.equals("cancel")) {
             resp.sendRedirect("meals");
             return;
         }
@@ -51,6 +52,13 @@ public class MealServlet extends HttpServlet {
                         LocalDateTime.parse(req.getParameter("dateTime")),
                         req.getParameter("description"),
                         Integer.valueOf(req.getParameter("calories")));
+
+                if(StringUtils.isEmpty(meal.getDescription())) {
+                    LOG.warn("Empty meal description!");
+                    req.setAttribute("message", "Ups! A meal description cannot be empty!");
+                    req.getRequestDispatcher("info.jsp").forward(req, resp);
+                    return;
+                }
 
                 if (meal.isNew()) {
                     String date = String.valueOf(meal.getDate());
@@ -102,35 +110,33 @@ public class MealServlet extends HttpServlet {
 
         } else if ("delete".equals(action)) {
             Integer mealId = null;
+
             try {
                 mealId = getId(req);
                 LOG.info("Delete {}", mealId);
                 mealController.delete(mealId, userId);
+                resp.sendRedirect("meals");
+
             } catch (Exception e) {
                 LOG.error(String.format("Could not perform deleting - a meal with id %d is not found!", mealId));
-                req.setAttribute("errorMsg", "Ups! A meal is not found!");
-                req.getRequestDispatcher("error.jsp").forward(req, resp);
-                return;
+                req.setAttribute("message", "Ups! A meal is not found!");
+                req.getRequestDispatcher("info.jsp").forward(req, resp);
+
             }
-
-            resp.sendRedirect("meals");
-
         } else if ("create".equals(action) || "update".equals(action)) {
-            Meal meal;
 
             try {
-                meal = action.equals("create") ?
+                Meal meal = action.equals("create") ?
                         new Meal(LocalDateTime.now().withNano(0).withSecond(0), "", 1000) :
                         mealController.get(getId(req), userId);
+                req.setAttribute("meal", meal);
+                req.getRequestDispatcher("mealEdit.jsp").forward(req, resp);
+
             } catch (Exception e) {
                 LOG.error("Could not perform updating - a meal is not found!");
-                req.setAttribute("errorMsg", "Ups! A meal is not found!");
-                req.getRequestDispatcher("error.jsp").forward(req, resp);
-                return;
+                req.setAttribute("message", "Ups! A meal is not found!");
+                req.getRequestDispatcher("info.jsp").forward(req, resp);
             }
-
-            req.setAttribute("meal", meal);
-            req.getRequestDispatcher("mealEdit.jsp").forward(req, resp);
         }
     }
 
