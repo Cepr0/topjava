@@ -1,3 +1,4 @@
+drop table if exists meals;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
 DROP SEQUENCE IF EXISTS global_seq;
@@ -32,7 +33,8 @@ create table meals (
   user_id integer not null,
   foreign key (user_id) references users (id) on delete cascade
 );
-create index date_time_idx on meals (date_time);
+-- create index date_time_idx on meals (date_time);
+create unique index unique_date_time_user_idx on meals (date_time, user_id)
 -- create index user_id_idx on meals (user_id);
 
 

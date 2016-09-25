@@ -51,10 +51,10 @@ public class JdbcMealRepositoryImpl implements MealRepository {
         if (meal.isNew()) {
             int mealId = insertingMeal.executeAndReturnKey(map).intValue();
             meal.setId(mealId);
-        } else {
-            namedJdbcTmpl.update("update meals \n" +
-                    "set date_time = :dateTime, description = :description, calories = :calories\n" +
-                    "where id = :id and user_id = :userId", map);
+        } else if (namedJdbcTmpl.update("update meals \n" +
+                "set date_time = :dateTime, description = :description, calories = :calories\n" +
+                "where id = :id and user_id = :userId", map) != 1) {
+            return null;
         }
         return meal;
     }
@@ -67,7 +67,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     @Override
     public Meal get(int id, int userId) {
         List<Meal> meals = jdbcTmpl.query("select * from meals where id = ? and user_id = ?", ROW_MAPPER, id, userId);
-        return DataAccessUtils.singleResult(meals);
+        return meals.isEmpty() ? null : DataAccessUtils.requiredSingleResult(meals);
     }
 
     @Override
