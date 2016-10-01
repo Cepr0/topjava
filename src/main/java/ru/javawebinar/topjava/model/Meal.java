@@ -10,9 +10,18 @@ import java.time.LocalTime;
  * GKislin
  * 11.01.2015.
  */
+
+@NamedQueries({
+    @NamedQuery(name = Meal.GET_BY_ID, query = "select meal FROM Meal meal WHERE meal.id = :id and meal.user.id = :userId"),
+    @NamedQuery(name = Meal.GET_ALL, query = "select meal FROM Meal meal WHERE meal.user.id = :userId order by meal.dateTime desc"),
+    @NamedQuery(name = Meal.GET_BETWEEN, query = "select meal FROM Meal meal WHERE meal.user.id = :userId and meal.dateTime between :fromDate and :toDate order by meal.dateTime desc")
+})
 @Entity
 @Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "meals_unique_user_datetime_idx")})
 public class Meal extends BaseEntity {
+  public static final String GET_BY_ID = "Meal.getById";
+  public static final String GET_ALL = "Meal.getAll";
+  public static final String GET_BETWEEN = "Meal.getBetween";
   
   @Column(name ="date_time", nullable = false)
   private LocalDateTime dateTime;

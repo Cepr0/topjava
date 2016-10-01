@@ -6,16 +6,13 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * User: gkisline
- * Date: 26.08.2014
- */
+import static ru.javawebinar.topjava.model.Meal.GET_ALL;
+import static ru.javawebinar.topjava.model.Meal.GET_BETWEEN;
+import static ru.javawebinar.topjava.model.Meal.GET_BY_ID;
 
 @Repository
 @Transactional(readOnly = true)
@@ -27,7 +24,6 @@ public class JpaMealRepositoryImpl implements MealRepository {
   @Override
   @Transactional
   public Meal save(Meal meal, int userId) {
-    // TODO Проверить что находиться в userId в случае апдэйта
     if (!meal.isNew() && get(meal.getId(), userId) == null) {
       return null;
     }
@@ -49,33 +45,65 @@ public class JpaMealRepositoryImpl implements MealRepository {
       return true;
     }
     return false;
+//    try {
+//      int count = em.createQuery("delete from Meal where id = :id and user.id = :userId")
+//          .setParameter("id", id)
+//          .setParameter("userId", userId)
+//          .executeUpdate();
+//      return count > 0;
+//
+//    } catch (Exception e) {
+//      return false;
+//    }
   }
   
   @Override
   public Meal get(int id, int userId) {
-    Meal meal = em.find(Meal.class, id); //getReference(Meal.class, id);
-    
-    // TODO Убедиться, что userId присутствует в Meal
-    if (meal != null && meal.getUser().getId() == userId) {
-      return meal;
+//    Meal meal = em.find(Meal.class, id);
+//
+//    if (meal != null && meal.getUser().getId() == userId) {
+//      return meal;
+//    }
+//    return null;
+    try {
+      return em.createNamedQuery(GET_BY_ID, Meal.class)
+          .setParameter("id", id)
+          .setParameter("userId", userId)
+          .getSingleResult();
+  
+//      return em.createQuery("select meal FROM Meal meal WHERE meal.id = :id and meal.user.id = :userId", Meal.class)
+//          .setParameter("id", id)
+//          .setParameter("userId", userId)
+//          .getSingleResult();
+
+    } catch (NoResultException | NonUniqueResultException e) {
+      return null;
     }
-    return null;
   }
   
   @Override
   public List<Meal> getAll(int userId) {
-    TypedQuery<Meal> query = em.createQuery("select meal FROM Meal meal WHERE meal.user.id = :userId order by meal.dateTime desc", Meal.class)
+    TypedQuery<Meal> query = em.createNamedQuery(GET_ALL, Meal.class)
         .setParameter("userId", userId);
-    return query.getResultList();
+    
+//    TypedQuery<Meal> query = em.createQuery("select meal FROM Meal meal WHERE meal.user.id = :userId order by meal.dateTime desc", Meal.class)
+//        .setParameter("userId", userId);
+//
+      return query.getResultList();
   }
   
   @Override
   public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-    TypedQuery<Meal> query = em.createQuery("select meal FROM Meal meal WHERE meal.user.id = :userId and meal.dateTime >= :fromDate and meal.dateTime <= :toDate order by meal.dateTime desc", Meal.class)
+    TypedQuery<Meal> query = em.createNamedQuery(GET_BETWEEN, Meal.class)
         .setParameter("userId", userId)
         .setParameter("fromDate", startDate)
         .setParameter("toDate", endDate);
-    
-    return query.getResultList();
+
+//    TypedQuery<Meal> query = em.createQuery("select meal FROM Meal meal WHERE meal.user.id = :userId and meal.dateTime >= :fromDate and meal.dateTime <= :toDate order by meal.dateTime desc", Meal.class)
+//        .setParameter("userId", userId)
+//        .setParameter("fromDate", startDate)
+//        .setParameter("toDate", endDate);
+//
+      return query.getResultList();
   }
 }
