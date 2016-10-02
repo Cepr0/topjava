@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.service;
 import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
@@ -45,16 +46,22 @@ public class MealServiceTest {
   
   @AfterClass
   public static void printResult() {
-    Stream<String> stream = testDurations.entrySet().stream()
-        .sorted((e1, e2) -> e1.getValue().compareTo(e2.getValue()))
-        .map(e -> String.format("%-20s %8d", e.getKey(), e.getValue()));
-  
-    System.out.printf("%nTest             Duration, ms%n");
-    System.out.println("-----------------------------");
-    stream.forEach(System.out::println);
-    System.out.printf("-----------------------------%n%n");
+    
+    if (!testDurations.isEmpty()) {
+      Stream<String> stream = testDurations.entrySet().stream()
+          .sorted((e1, e2) -> e1.getValue().compareTo(e2.getValue()))
+          .map(e -> String.format("%-20s %8d", e.getKey(), e.getValue()));
+    
+      System.out.printf("%nTest             Duration, ms%n");
+      System.out.println("-----------------------------");
+      stream.forEach(System.out::println);
+      System.out.printf("-----------------------------%n%n");
+    }
   }
   
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+    
   @Rule
   public Stopwatch stopwatch = new Stopwatch() {
     @Override
@@ -73,8 +80,10 @@ public class MealServiceTest {
     MATCHER.assertCollectionEquals(Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2), service.getAll(USER_ID));
   }
   
-  @Test(expected = NotFoundException.class)
+//  @Test(expected = NotFoundException.class)
+  @Test
   public void testDeleteNotFound() throws Exception {
+    thrown.expect(NotFoundException.class);
     service.delete(MEAL1_ID, 1);
   }
   
@@ -91,8 +100,10 @@ public class MealServiceTest {
     MATCHER.assertEquals(ADMIN_MEAL1, actual);
   }
   
-  @Test(expected = NotFoundException.class)
+//  @Test(expected = NotFoundException.class)
+  @Test
   public void testGetNotFound() throws Exception {
+    thrown.expect(NotFoundException.class);
     service.get(MEAL1_ID, ADMIN_ID);
   }
   
@@ -103,9 +114,12 @@ public class MealServiceTest {
     MATCHER.assertEquals(updated, service.get(MEAL1_ID, USER_ID));
   }
   
-  @Test(expected = NotFoundException.class)
+//  @Test(expected = NotFoundException.class)
+  @Test
   public void testNotFoundUpdate() throws Exception {
     Meal item = service.get(MEAL1_ID, USER_ID);
+    thrown.expect(NotFoundException.class);
+    thrown.expectMessage("Not found entity with id=" + MEAL1_ID);
     service.update(item, ADMIN_ID);
   }
   

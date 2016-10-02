@@ -10,9 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.javawebinar.topjava.model.Meal.GET_ALL;
-import static ru.javawebinar.topjava.model.Meal.GET_BETWEEN;
-import static ru.javawebinar.topjava.model.Meal.GET_BY_ID;
+import static ru.javawebinar.topjava.model.Meal.*;
 
 @Repository
 @Transactional(readOnly = true)
@@ -24,16 +22,29 @@ public class JpaMealRepositoryImpl implements MealRepository {
   @Override
   @Transactional
   public Meal save(Meal meal, int userId) {
-    if (!meal.isNew() && get(meal.getId(), userId) == null) {
-      return null;
-    }
-    
-    meal.setUser(em.getReference(User.class, userId));
+//    if (!meal.isNew() && get(meal.getId(), userId) == null) {
+//      return null;
+//    }
+//
+//    meal.setUser(em.getReference(User.class, userId));
     if (meal.isNew()) {
+      meal.setUser(em.getReference(User.class, userId));
       em.persist(meal);
       return meal;
     } else {
-      return em.merge(meal);
+      int count = em.createNamedQuery(UPDATE)
+          .setParameter("dateTime", meal.getDateTime())
+          .setParameter("description", meal.getDescription())
+          .setParameter("calories", meal.getCalories())
+          .setParameter("id", meal.getId())
+          .setParameter("userId", userId)
+          .executeUpdate();
+      if (count == 0) {
+        return null;
+      } else {
+        return meal;
+      }
+//      return em.merge(meal);
     }
   }
   
