@@ -12,6 +12,5 @@ public class Profiles {
       JPA = "jpa",
       DATAJPA = "datajpa";
   
-  public static final String ACTIVE_DB = HSQLDB;
-  public static final String ACTIVE_REPO = JDBC;
+  public static final String ACTIVE_DB = POSTGRES;
 }
