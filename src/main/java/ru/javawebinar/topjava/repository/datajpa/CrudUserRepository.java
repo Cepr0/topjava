@@ -21,16 +21,8 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
     int delete(@Param("id") int id);
 
     @Override
-    @Transactional
-    User save(User user);
-
-    @Override
-    User findOne(Integer id);
-
-    @Override
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles ORDER BY u.name, u.email")
     List<User> findAll();
 
     User getByEmail(String email);
-
 }
