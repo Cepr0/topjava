@@ -15,14 +15,17 @@ import java.util.List;
  */
 @Transactional(readOnly = true)
 public interface CrudUserRepository extends JpaRepository<User, Integer> {
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM User u WHERE u.id=:id")
-    int delete(@Param("id") int id);
-
-    @Override
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles ORDER BY u.name, u.email")
-    List<User> findAll();
-
-    User getByEmail(String email);
+  @Transactional
+  @Modifying
+  @Query("DELETE FROM User u WHERE u.id=:id")
+  int delete(@Param("id") int id);
+  
+  @Override
+  @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles ORDER BY u.name, u.email")
+  List<User> findAll();
+  
+  User getByEmail(String email);
+  
+  @Query("select u from User u left join fetch u.meals where u.id = :id")
+  User getWithMeals(@Param("id") int id);
 }

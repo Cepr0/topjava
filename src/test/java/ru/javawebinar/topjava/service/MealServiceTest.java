@@ -51,7 +51,7 @@ public abstract class MealServiceTest {
     if (!testDurations.isEmpty()) {
       Stream<String> stream = testDurations.entrySet().stream()
           .sorted((e1, e2) -> e1.getValue().compareTo(e2.getValue()))
-          .map(e -> String.format("%-20s %8d", e.getKey(), e.getValue()));
+          .map(e -> String.format("%-23s %5d", e.getKey(), e.getValue()));
   
       System.out.printf("%n%s%n", testedClassName);
       System.out.println("=============================");
