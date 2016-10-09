@@ -1,9 +1,6 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
@@ -47,6 +44,8 @@ public abstract class MealServiceTest {
   
   private static final Map<String, Long> testDurations = new HashMap<>();
   
+  static String testedClassName;
+  
   @AfterClass
   public static void printResult() {
     if (!testDurations.isEmpty()) {
@@ -54,7 +53,9 @@ public abstract class MealServiceTest {
           .sorted((e1, e2) -> e1.getValue().compareTo(e2.getValue()))
           .map(e -> String.format("%-20s %8d", e.getKey(), e.getValue()));
   
-      System.out.printf("%nTest             Duration, ms%n");
+      System.out.printf("%n%s%n", testedClassName);
+      System.out.println("=============================");
+      System.out.printf("Test             Duration, ms%n");
       System.out.println("-----------------------------");
       stream.forEach(System.out::println);
       System.out.printf("-----------------------------%n%n");
@@ -68,7 +69,7 @@ public abstract class MealServiceTest {
     protected void finished(long nanos, Description description) {
       String testName = description.getMethodName();
       long duration = TimeUnit.NANOSECONDS.toMillis(nanos);
-      String result = String.format("*** %s duration is %d ms", testName, duration);
+      String result = String.format(">>> %s.%s duration is %d ms", testedClassName, testName, duration);
       LOG.info(result);
       testDurations.put(testName, duration);
     }
@@ -79,9 +80,12 @@ public abstract class MealServiceTest {
   
   @Before
   public void setUp() throws Exception {
+    setTestedClassName();
     service.evictCache();
   }
   
+  public abstract void setTestedClassName();
+    
   @Test
   public void testDelete() throws Exception {
     service.delete(MEAL1_ID, USER_ID);

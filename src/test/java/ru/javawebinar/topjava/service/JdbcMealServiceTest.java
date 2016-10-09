@@ -16,6 +16,11 @@ public class JdbcMealServiceTest extends MealServiceTest {
   }
   
   @Override
+  public void setTestedClassName() {
+    testedClassName = getClass().getSimpleName();
+  }
+  
+  @Override
   public void testDelete() throws Exception {
     super.testDelete();
   }
