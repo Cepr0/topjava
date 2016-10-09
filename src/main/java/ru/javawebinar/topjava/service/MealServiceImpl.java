@@ -27,6 +27,11 @@ public class MealServiceImpl implements MealService {
     return ExceptionUtil.checkNotFoundWithId(repository.get(id, userId), id);
   }
   
+  @Override
+  public Meal getWithUser(int id, int userId) {
+    return ExceptionUtil.checkNotFoundWithId(repository.getWithUser(id, userId), id);
+  }
+  
   @CacheEvict(value = "meals", allEntries = true)
   @Override
   public void delete(int id, int userId) {
