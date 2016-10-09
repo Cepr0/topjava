@@ -71,6 +71,7 @@ public abstract class MealServiceTest {
       long duration = TimeUnit.NANOSECONDS.toMillis(nanos);
       String result = String.format(">>> %s.%s duration is %d ms", testedClassName, testName, duration);
       LOG.info(result);
+      
       testDurations.put(testName, duration);
     }
   };
