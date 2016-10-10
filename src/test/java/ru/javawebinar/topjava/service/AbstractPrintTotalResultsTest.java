@@ -5,6 +5,8 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +21,8 @@ public abstract class AbstractPrintTotalResultsTest {
   private final static StringBuilder testResults = new StringBuilder();
   private static final Map<String, Long> testDurations = new HashMap<>();
   private static boolean needToSetHeader = false;
+  
+  private static final Logger LOGGER = LoggerFactory.getLogger(AbstractPrintTotalResultsTest.class);
 
   @Rule
   public Stopwatch stopwatch = new Stopwatch() {
@@ -61,7 +65,7 @@ public abstract class AbstractPrintTotalResultsTest {
     testDurations.clear();
 
     if (TESTS_COUNT == 0) {
-      System.out.println(testResults.toString());
+      LOGGER.info(testResults.toString());
     }
   }
 }
