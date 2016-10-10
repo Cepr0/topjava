@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractPrintTotalResultsTest {
   // set number of test classes
   // TODO maybe use reflection to determine count of inheritors?
-  private static int TESTS_COUNT = 3;
+  private static int TESTS_COUNT = 6;
 
   private final static StringBuilder testResults = new StringBuilder();
   private static final Map<String, Long> testDurations = new HashMap<>();

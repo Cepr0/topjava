@@ -5,8 +5,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,7 +31,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(Profiles.ACTIVE_DB)
 public abstract class AbstractMealServiceTest extends AbstractPrintTotalResultsTest {
-  private static final Logger LOG = LoggerFactory.getLogger(AbstractMealServiceTest.class);
+//  private static final Logger LOG = LoggerFactory.getLogger(AbstractMealServiceTest.class);
   
   @Rule
   public ExpectedException thrown = ExpectedException.none();
