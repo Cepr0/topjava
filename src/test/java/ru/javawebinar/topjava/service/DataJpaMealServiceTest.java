@@ -16,11 +16,6 @@ import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
  */
 @ActiveProfiles(Profiles.DATAJPA)
 public class DataJpaMealServiceTest extends AbstractMealServiceTest {
-  @Override
-  public String getResultTableTitle() {
-    return getClass().getSimpleName();
-  }
-
   @Test
   public void testGetWithUser() throws Exception {
     Meal actual = service.getWithUser(ADMIN_MEAL_ID, ADMIN_ID);

@@ -39,7 +39,7 @@ public abstract class AbstractPrintTotalResultsTest {
     // Set the header of the results table
     if (needToSetHeader) {
       testResults
-          .append(String.format("%n%s%n", getResultTableTitle()))
+          .append(String.format("%n%s%n", getClass().getSimpleName()))
           .append(String.format("=============================%n"))
           .append(String.format("Test             Duration, ms%n"))
           .append(String.format("-----------------------------%n"));
@@ -64,6 +64,4 @@ public abstract class AbstractPrintTotalResultsTest {
       System.out.println(testResults.toString());
     }
   }
-
-  public abstract String getResultTableTitle();
 }

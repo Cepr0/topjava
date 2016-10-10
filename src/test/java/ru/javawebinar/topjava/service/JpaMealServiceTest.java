@@ -10,8 +10,4 @@ import ru.javawebinar.topjava.Profiles;
 
 @ActiveProfiles(Profiles.JPA)
 public class JpaMealServiceTest extends AbstractMealServiceTest {
-  @Override
-  public String getResultTableTitle() {
-    return getClass().getSimpleName();
-  }
 }

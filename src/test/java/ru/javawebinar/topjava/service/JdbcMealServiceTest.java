@@ -10,8 +10,4 @@ import ru.javawebinar.topjava.Profiles;
 
 @ActiveProfiles(Profiles.JDBC)
 public class JdbcMealServiceTest extends AbstractMealServiceTest {
-  @Override
-  public String getResultTableTitle() {
-    return getClass().getSimpleName();
-  }
 }
