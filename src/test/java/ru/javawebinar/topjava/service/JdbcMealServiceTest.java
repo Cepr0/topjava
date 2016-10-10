@@ -9,59 +9,9 @@ import ru.javawebinar.topjava.Profiles;
  */
 
 @ActiveProfiles(Profiles.JDBC)
-public class JdbcMealServiceTest extends MealServiceTest {
+public class JdbcMealServiceTest extends AbstractMealServiceTest {
   @Override
-  public void setUp() throws Exception {
-    super.setUp();
-  }
-  
-  @Override
-  public void setTestedClassName() {
-    testedClassName = getClass().getSimpleName();
-  }
-  
-  @Override
-  public void testDelete() throws Exception {
-    super.testDelete();
-  }
-  
-  @Override
-  public void testDeleteNotFound() throws Exception {
-    super.testDeleteNotFound();
-  }
-  
-  @Override
-  public void testSave() throws Exception {
-    super.testSave();
-  }
-  
-  @Override
-  public void testGet() throws Exception {
-    super.testGet();
-  }
-  
-  @Override
-  public void testGetNotFound() throws Exception {
-    super.testGetNotFound();
-  }
-  
-  @Override
-  public void testUpdate() throws Exception {
-    super.testUpdate();
-  }
-  
-  @Override
-  public void testNotFoundUpdate() throws Exception {
-    super.testNotFoundUpdate();
-  }
-  
-  @Override
-  public void testGetAll() throws Exception {
-    super.testGetAll();
-  }
-  
-  @Override
-  public void testGetBetween() throws Exception {
-    super.testGetBetween();
+  public String getResultTableTitle() {
+    return getClass().getSimpleName();
   }
 }

@@ -14,39 +14,13 @@ import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
  * @author Cepro
  *         09.10.2016
  */
-
 @ActiveProfiles(Profiles.DATAJPA)
-public class DataJpaMealServiceTest extends MealServiceTest {
+public class DataJpaMealServiceTest extends AbstractMealServiceTest {
   @Override
-  public void setUp() throws Exception {
-    super.setUp();
+  public String getResultTableTitle() {
+    return getClass().getSimpleName();
   }
-  
-  @Override
-  public void setTestedClassName() {
-    testedClassName = getClass().getSimpleName();
-  }
-  
-  @Override
-  public void testDelete() throws Exception {
-    super.testDelete();
-  }
-  
-  @Override
-  public void testDeleteNotFound() throws Exception {
-    super.testDeleteNotFound();
-  }
-  
-  @Override
-  public void testSave() throws Exception {
-    super.testSave();
-  }
-  
-  @Override
-  public void testGet() throws Exception {
-    super.testGet();
-  }
-  
+
   @Test
   public void testGetWithUser() throws Exception {
     Meal actual = service.getWithUser(ADMIN_MEAL_ID, ADMIN_ID);
@@ -57,30 +31,5 @@ public class DataJpaMealServiceTest extends MealServiceTest {
   @Test(expected = NotFoundException.class)
   public void testGetWithUserNotFound() throws Exception {
     service.getWithUser(MEAL1_ID, ADMIN_ID);
-  }
-  
-  @Override
-  public void testGetNotFound() throws Exception {
-    super.testGetNotFound();
-  }
-  
-  @Override
-  public void testUpdate() throws Exception {
-    super.testUpdate();
-  }
-  
-  @Override
-  public void testNotFoundUpdate() throws Exception {
-    super.testNotFoundUpdate();
-  }
-  
-  @Override
-  public void testGetAll() throws Exception {
-    super.testGetAll();
-  }
-  
-  @Override
-  public void testGetBetween() throws Exception {
-    super.testGetBetween();
   }
 }
