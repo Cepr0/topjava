@@ -11,7 +11,7 @@
         </encoder>
     </appender>
 
-    <appender name="testResults" class="ch.qos.logback.core.FileAppender">
+    <appender name="testResultsToFile" class="ch.qos.logback.core.FileAppender">
         <file>${TOPJAVA_ROOT}/log/testResults.log</file>
         <encoder>
             <charset>UTF-8</charset>
@@ -20,8 +20,20 @@
         <param name="append" value="false" />
     </appender>
 
+    <appender name="testResultsToConsole" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="ru.javawebinar.topjava.service.AbstractPrintTotalResultsTest" level="debug" additivity="false">
-        <appender-ref ref="testResults"/>
+        <appender-ref ref="testResultsToFile"/>
+    </logger>
+
+    <logger name="ru.javawebinar.topjava.TestResultListener" level="debug" additivity="false">
+        <appender-ref ref="testResultsToFile"/>
+        <appender-ref ref="testResultsToConsole"/>
     </logger>
 
     <logger name="org.springframework.jdbc" level="debug"/>

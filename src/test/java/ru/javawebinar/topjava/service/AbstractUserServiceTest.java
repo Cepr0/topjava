@@ -11,6 +11,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.javawebinar.topjava.Profiles;
+import ru.javawebinar.topjava.TestResultBroadcaster;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
@@ -28,7 +29,7 @@ import static ru.javawebinar.topjava.UserTestData.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(Profiles.ACTIVE_DB)
-public abstract class AbstractUserServiceTest extends AbstractPrintTotalResultsTest {
+public abstract class AbstractUserServiceTest extends TestResultBroadcaster {
 
     @Autowired
     protected UserService service;
