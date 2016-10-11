@@ -158,7 +158,28 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!--Tools-->
+        <dependency>
+            <groupId>gigadot.rebound</groupId>
+            <artifactId>rebound</artifactId>
+            <version>0.2</version>
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>log4j</groupId>-->
+                    <!--<artifactId>log4j</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        </dependency>
+
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>gigadot.net</id>
+            <url>http://maven2.gigadot.net/</url>
+        </repository>
+    </repositories>
 
     <profiles>
         <profile>

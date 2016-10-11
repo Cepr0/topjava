@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import gigadot.rebound.Rebound;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -14,9 +15,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public abstract class AbstractPrintTotalResultsTest {
-  // set number of test classes
-  // TODO maybe use reflection to determine count of inheritors?
-  private static int TESTS_COUNT = 6;
+  // get number of test subclasses with Rebound lib (https://bitbucket.org/gigadot/rebound/wiki/Home)
+  private static Rebound r = new Rebound(AbstractPrintTotalResultsTest.class.getPackage().getName());
+  private static int TESTS_COUNT = r.getSubClassesOf(AbstractPrintTotalResultsTest.class).size();
 
   private final static StringBuilder testResults = new StringBuilder();
   private static final Map<String, Long> testDurations = new HashMap<>();
@@ -44,9 +45,9 @@ public abstract class AbstractPrintTotalResultsTest {
     if (needToSetHeader) {
       testResults
           .append(String.format("%n%s%n", getClass().getSimpleName()))
-          .append(String.format("=============================%n"))
-          .append(String.format("Test             Duration, ms%n"))
-          .append(String.format("-----------------------------%n"));
+          .append(String.format("===============================%n"))
+          .append(String.format("Test               Duration, ms%n"))
+          .append(String.format("-------------------------------%n"));
     }
     needToSetHeader = false;
   }
@@ -58,9 +59,9 @@ public abstract class AbstractPrintTotalResultsTest {
     testResults
         .append(testDurations.entrySet().stream()
             .sorted((e1, e2) -> e1.getValue().compareTo(e2.getValue()))
-            .map(e -> String.format("%-23s %5d%n", e.getKey(), e.getValue()))
+            .map(e -> String.format("%-25s %5d%n", e.getKey(), e.getValue()))
             .collect(Collectors.joining("")))
-        .append(String.format("-----------------------------%n"));
+        .append(String.format("-------------------------------%n"));
 
     testDurations.clear();
 
