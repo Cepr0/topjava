@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava;
 
-import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.RunListener;
 import org.slf4j.Logger;
@@ -22,26 +21,29 @@ public class TestResultListener extends RunListener {
   // <"className", <"testName", duration>>
   static final private Map<String, Map<String, Long>> resultsData = new ConcurrentSkipListMap<>();
   
-  static Map<String, Long> putTestClassName(@NotNull String className) {
-    Map<String, Long> testResults;
-    if (resultsData.containsKey(className)) {
-      testResults = resultsData.get(className);
-    } else {
-      testResults = new HashMap<>();
-      resultsData.put(className, testResults);
-    }
-    return testResults;
+//  static Map<String, Long> putTestClassName(@NotNull String className) {
+//    Map<String, Long> newTestResults = new HashMap<>();
+//    Map<String, Long> curTestResults = resultsData.putIfAbsent(className, newTestResults);
+//    return curTestResults == null ? newTestResults : curTestResults;
+//  }
+//
+  static void putResults(@NotNull String className, @NotNull String testName, long duration) {
+    Map<String, Long> testResults = resultsData.getOrDefault(className, new HashMap<>());
+    testResults.put(testName, duration);
+    resultsData.put(className, testResults);
   }
-  
-  @Override
-  public void testRunStarted(Description description) throws Exception {
-    // Called before any tests have been run.
-  }
-  
+
+//  // Called before any tests have been run.
+//  @Override
+//  public void testRunStarted(Description description) throws Exception {
+//  }
+
+  // Called when all tests have finished
   @Override
   public void testRunFinished(Result result) throws Exception {
-    // Called when all tests have finished
+
     StringBuilder resultStringBuilder = new StringBuilder();
+
     for (Map.Entry<String, Map<String, Long>> entry : resultsData.entrySet()) {
       String testClassName = entry.getKey();
       

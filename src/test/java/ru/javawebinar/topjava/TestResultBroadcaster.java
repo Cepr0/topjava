@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
@@ -19,14 +18,10 @@ public abstract class TestResultBroadcaster {
   public Stopwatch stopwatch = new Stopwatch() {
     @Override
     protected void finished(long nanos, Description description) {
+      String className = description.getTestClass().getSimpleName();
       String testName = description.getMethodName();
       long duration = TimeUnit.NANOSECONDS.toMillis(nanos);
-      testResults.put(testName, duration);
+      TestResultListener.putResults(className, testName, duration);
     }
   };
-  
-  @Before
-  public void setTestClassName() {
-    testResults = TestResultListener.putTestClassName(getClass().getSimpleName());
-  }
 }
