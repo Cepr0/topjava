@@ -4,7 +4,6 @@ import org.junit.Rule;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -12,8 +11,7 @@ import java.util.concurrent.TimeUnit;
  *         11.10.16
  */
 public abstract class TestResultBroadcaster {
-  private Map<String, Long> testResults;
-  
+
   @Rule
   public Stopwatch stopwatch = new Stopwatch() {
     @Override
