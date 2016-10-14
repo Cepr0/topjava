@@ -12,7 +12,7 @@
     </appender>
 
     <appender name="testResultsToFile" class="ch.qos.logback.core.FileAppender">
-        <file>${TOPJAVA_ROOT}/log/testResults.log</file>
+        <file>./log/testResults.log</file>
         <encoder>
             <charset>UTF-8</charset>
             <pattern>%msg%n</pattern>
