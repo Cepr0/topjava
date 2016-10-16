@@ -8,8 +8,6 @@
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
 <section>
-    <h2><a href="${pageContext.request.contextPath}/"><fmt:message key="app.home"/></a></h2>
-
     <h3>
         <c:set var="page_title" value='meal.edit.title'/>
         <c:if test="${param.action == 'create'}">

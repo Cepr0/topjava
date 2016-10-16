@@ -6,7 +6,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.TimeUtil;
-import ru.javawebinar.topjava.web.meal.MealRestController;
+import ru.javawebinar.topjava.web.meal.MealController;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -27,13 +27,13 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(MealServlet.class);
 
-    private MealRestController mealController;
+    private MealController mealController;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
-        mealController = springContext.getBean(MealRestController.class);
+        mealController = springContext.getBean(MealController.class);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

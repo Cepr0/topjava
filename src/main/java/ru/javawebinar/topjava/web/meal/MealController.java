@@ -20,8 +20,8 @@ import java.util.List;
  * 06.03.2015.
  */
 @Controller
-public class MealRestController {
-    private static final Logger LOG = LoggerFactory.getLogger(MealRestController.class);
+public class MealController {
+    static final Logger LOG = LoggerFactory.getLogger(MealController.class);
 
     @Autowired
     private MealService service;
