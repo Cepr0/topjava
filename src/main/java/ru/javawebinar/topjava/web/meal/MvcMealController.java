@@ -2,10 +2,8 @@ package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.TimeUtil;
 
@@ -65,7 +63,7 @@ public class MvcMealController extends MealController {
     return "meals";
   }
   
-  @RequestMapping(method = POST)
+  @RequestMapping(value = "/meals", method = POST)
   public String saveMeal(HttpServletRequest request) {
     String id = request.getParameter("id");
     Meal meal = null;
@@ -86,16 +84,16 @@ public class MvcMealController extends MealController {
     return "redirect:/meals";
   }
   
-  @ExceptionHandler(Throwable.class)
-  public ModelAndView handleException(HttpServletRequest req, Exception ex) {
-    LOG.error("Request: " + req.getRequestURL() + " raised " + ex);
-    ModelAndView mav = new ModelAndView();
-    mav.addObject("exception", ex);
-    mav.addObject("url", req.getRequestURL());
-    mav.setViewName("info");
-    return mav;
-  }
-  
+//  @ExceptionHandler(Throwable.class)
+//  public ModelAndView handleException(HttpServletRequest req, Exception ex) {
+//    LOG.error("Request: " + req.getRequestURL() + " raised " + ex);
+//    ModelAndView mav = new ModelAndView();
+//    mav.addObject("exception", ex);
+//    mav.addObject("url", req.getRequestURL());
+//    mav.setViewName("info");
+//    return mav;
+//  }
+//
   private String resetParam(String param, HttpServletRequest request) {
     String value = request.getParameter(param);
     request.setAttribute(param, value);

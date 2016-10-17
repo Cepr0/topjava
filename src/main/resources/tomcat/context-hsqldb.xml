@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>
+
+    <Resource name="jdbc/topjava"
+              auth="Container"
+              type="javax.sql.DataSource"
+              maxActive="5" minIdle="1" maxWait="100000"
+              initialSize="3" maxPoolSize="5" minPoolSize="1" maxConnectionAge="0"
+              maxIdleTime="1800" maxIdleTimeExcessConnections="120" idleConnectionTestPeriod="30"
+              acquireIncrement="1" testConnectionOnCheckout="true"
+              removeAbandoned="true" logAbandoned="true"
+              driverClassName="org.hsqldb.jdbcDriver"
+              username="sa"
+              password=""
+              url="jdbc:hsqldb:mem:topjava"/>
+</Context>
