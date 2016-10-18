@@ -58,11 +58,11 @@ public class User extends NamedEntity {
     @Column(name = "calories_per_day", columnDefinition = "default 2000")
     @Digits(fraction = 0, integer = 4)
     private int caloriesPerDay = MealsUtil.DEFAULT_CALORIES_PER_DAY;
-
+    
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("dateTime DESC")
     protected List<Meal> meals;
-
+    
     public User() {
     }
 
@@ -141,5 +141,15 @@ public class User extends NamedEntity {
                 ", roles=" + roles +
                 ", caloriesPerDay=" + caloriesPerDay +
                 ')';
+    }
+    
+    public void setRole(Role role) {
+        if (roles == null) roles = EnumSet.of(role);
+        else roles.add(role);
+    }
+
+    public void setRoles(Set<Role> roles) {
+        if (this.roles == null) this.roles = roles;
+        else this.roles.addAll(roles);
     }
 }
