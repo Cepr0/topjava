@@ -11,6 +11,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -76,6 +77,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         User updated = new User(USER);
         updated.setName("UpdatedName");
         updated.setCaloriesPerDay(330);
+        updated.setRoles(EnumSet.of(Role.ROLE_ADMIN, Role.ROLE_USER));
         service.update(updated);
         MATCHER.assertEquals(updated, service.get(USER_ID));
     }

@@ -9,10 +9,7 @@ import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: gkislin
@@ -51,7 +48,7 @@ public class User extends NamedEntity {
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Role> roles;
 
@@ -143,23 +140,13 @@ public class User extends NamedEntity {
                 ')';
     }
     
-    public User setRole(Role role) {
-        if (roles == null) roles = EnumSet.of(role);
-        else roles.add(role);
-        return this;
+    public void setRoles(Set<Role> roles) {
+        this.roles = EnumSet.copyOf(roles);
     }
-
-    public User setRoles(Set<Role> roles) {
+    
+    public User addRoles(Set<Role> roles) {
         if (this.roles == null) this.roles = roles;
         else this.roles.addAll(roles);
         return this;
     }
-
-//    public void setRole(String role) {
-//        try {
-//            if (roles == null) roles = EnumSet.of(Role.valueOf(role));
-//            else roles.add(Role.valueOf(role));
-//        } catch (Exception ignored) {
-//        }
-//    }
 }
