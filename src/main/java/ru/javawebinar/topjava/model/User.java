@@ -143,13 +143,23 @@ public class User extends NamedEntity {
                 ')';
     }
     
-    public void setRole(Role role) {
+    public User setRole(Role role) {
         if (roles == null) roles = EnumSet.of(role);
         else roles.add(role);
+        return this;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public User setRoles(Set<Role> roles) {
         if (this.roles == null) this.roles = roles;
         else this.roles.addAll(roles);
+        return this;
     }
+
+//    public void setRole(String role) {
+//        try {
+//            if (roles == null) roles = EnumSet.of(Role.valueOf(role));
+//            else roles.add(Role.valueOf(role));
+//        } catch (Exception ignored) {
+//        }
+//    }
 }
