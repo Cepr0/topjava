@@ -17,7 +17,6 @@ import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.sql.DataSource;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * User: gkislin
@@ -42,7 +41,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
             while(rs.next()) users.add(ROW_MAPPER_WITH_ROLES.mapRow(rs, rs.getRow()));
             Map<Integer, User> groupedUsers = new LinkedHashMap<>();
             users.forEach(user -> groupedUsers.merge(user.getId(), user, (u1, u2) -> u1.addRoles(u2.getRoles())));
-            return groupedUsers.values().stream().collect(Collectors.toList());
+            return new ArrayList<>(groupedUsers.values());
     };
     
     @Autowired
