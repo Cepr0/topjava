@@ -60,9 +60,10 @@ public abstract class AbstractMealController {
         int userId = AuthorizedUser.id();
         LOG.info("getBetween dates {} - {} for time {} - {} for User {}", startDate, endDate, startTime, endTime, userId);
         return MealsUtil.getFilteredWithExceeded(
-                service.getBetweenDates(
-                        startDate != null ? startDate : TimeUtil.MIN_DATE, endDate != null ? endDate : TimeUtil.MAX_DATE, userId
-                ), startTime != null ? startTime : LocalTime.MIN, endTime != null ? endTime : LocalTime.MAX, AuthorizedUser.getCaloriesPerDay()
+                service.getBetweenDates(startDate != null ? startDate : TimeUtil.MIN_DATE, endDate != null ? endDate : TimeUtil.MAX_DATE, userId),
+                startTime != null ? startTime : LocalTime.MIN,
+                endTime != null ? endTime : LocalTime.MAX,
+                AuthorizedUser.getCaloriesPerDay()
         );
     }
 }
