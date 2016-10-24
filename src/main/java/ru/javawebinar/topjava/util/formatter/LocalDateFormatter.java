@@ -20,6 +20,6 @@ public class LocalDateFormatter implements Formatter<LocalDate> {
     
     @Override
     public String print(LocalDate date, Locale locale) {
-        return date.format(DateTimeFormatter.ISO_LOCAL_DATE);
+        return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")/*DateTimeFormatter.ISO_LOCAL_DATE*/);
     }
 }

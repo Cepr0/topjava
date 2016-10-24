@@ -284,6 +284,9 @@
                     <version>2.3.4</version>
                 </dependency>
             </dependencies>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
         <profile>
             <id>postgres</id>
@@ -299,9 +302,6 @@
                     <version>${tomcat.version}</version>
                 </dependency>
             </dependencies>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
         </profile>
     </profiles>
 
