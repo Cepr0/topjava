@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
-import ru.javawebinar.topjava.util.TimeUtil;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -66,9 +65,9 @@ public class MealRestController extends AbstractMealController {
             @RequestParam(value = "endDate", required = false) LocalDate endDate,
             @RequestParam(value = "endTime", required = false) LocalTime endTime) {
         return super.getBetween(
-                startDate == null ? TimeUtil.MIN_DATE : startDate,
-                startTime == null ? LocalTime.MIN : startTime,
-                endDate == null ? TimeUtil.MAX_DATE : endDate,
-                endTime == null ? LocalTime.MAX : endTime);
+                startDate/* == null ? TimeUtil.MIN_DATE : startDate*/,
+                startTime/* == null ? LocalTime.MIN : startTime*/,
+                endDate/* == null ? TimeUtil.MAX_DATE : endDate*/,
+                endTime/* == null ? LocalTime.MAX : endTime*/);
     }
 }

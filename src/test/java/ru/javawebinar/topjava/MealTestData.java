@@ -3,6 +3,7 @@ package ru.javawebinar.topjava;
 import ru.javawebinar.topjava.matcher.ModelMatcher;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.Month;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
 public class MealTestData {
 
     public static final ModelMatcher<Meal> MATCHER = new ModelMatcher<>(Meal.class);
-    public static final ModelMatcher<MealWithExceed> MATCHER_WITH_EXCEED = new ModelMatcher<>(MealWithExceed.class);
+    public static final ModelMatcher<MealWithExceed> MATCHER_EX = new ModelMatcher<>(MealWithExceed.class);
 
     public static final int MEAL1_ID = START_SEQ + 2;
     public static final int ADMIN_MEAL_ID = START_SEQ + 8;
@@ -31,8 +32,15 @@ public class MealTestData {
     public static final Meal MEAL6 = new Meal(MEAL1_ID + 5, of(2015, Month.MAY, 31, 20, 0), "Ужин", 510);
     public static final Meal ADMIN_MEAL1 = new Meal(ADMIN_MEAL_ID, of(2015, Month.JUNE, 1, 14, 0), "Админ ланч", 510);
     public static final Meal ADMIN_MEAL2 = new Meal(ADMIN_MEAL_ID + 1, of(2015, Month.JUNE, 1, 21, 0), "Админ ужин", 1500);
+    public static final MealWithExceed MEAL_EX1 = MealsUtil.createWithExceed(MEAL1, false);
+    public static final MealWithExceed MEAL_EX2 = MealsUtil.createWithExceed(MEAL2, false);
+    public static final MealWithExceed MEAL_EX3 = MealsUtil.createWithExceed(MEAL3, false);
+    public static final MealWithExceed MEAL_EX4 = MealsUtil.createWithExceed(MEAL4, true);
+    public static final MealWithExceed MEAL_EX5 = MealsUtil.createWithExceed(MEAL5, true);
+    public static final MealWithExceed MEAL_EX6 = MealsUtil.createWithExceed(MEAL6, true);
 
     public static final List<Meal> MEALS = Arrays.asList(MEAL6, MEAL5, MEAL4, MEAL3, MEAL2, MEAL1);
+    public static final List<MealWithExceed> MEALS_EX = Arrays.asList(MEAL_EX6, MEAL_EX5, MEAL_EX4, MEAL_EX3, MEAL_EX2, MEAL_EX1);
 
     public static Meal getCreated() {
         return new Meal(null, of(2015, Month.JUNE, 1, 18, 0), "Созданный ужин", 300);
