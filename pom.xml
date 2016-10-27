@@ -78,14 +78,6 @@
                 <customArg>-Dspring.profiles.active=hsqldb</customArg>
             </properties>
 
-            <dependencies>
-                <dependency>
-                    <groupId>org.hsqldb</groupId>
-                    <artifactId>hsqldb</artifactId>
-                    <version>2.3.4</version>
-                </dependency>
-            </dependencies>
-
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -101,19 +93,6 @@
                 <db.context>src/main/resources/tomcat/context.xml</db.context>
                 <customArg>-Dspring.profiles.active=postgres</customArg>
             </properties>
-
-            <dependencies>
-                <dependency>
-                    <groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                    <version>${postgresql.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.tomcat</groupId>
-                    <artifactId>tomcat-jdbc</artifactId>
-                    <version>${tomcat.version}</version>
-                </dependency>
-            </dependencies>
             <!--<activation>-->
             <!--<activeByDefault>true</activeByDefault>-->
             <!--</activation>-->
@@ -152,7 +131,6 @@
                 <configuration>
                     <container>
                         <containerId>tomcat8x</containerId>
-                        <!--<home>${project.build.directory}\tomcat8x</home>-->
                         <systemProperties>
                             <file.encoding>UTF-8</file.encoding>
                             <spring.profiles.active>tomcat,${db.profile},${impl.profile}</spring.profiles.active>
@@ -209,6 +187,26 @@
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <!--DB-->
+        <!--HSQLDB-->
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.3.4</version>
+        </dependency>
+
+        <!--Postgres-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>${tomcat.version}</version>
         </dependency>
 
         <!-- Spring -->
