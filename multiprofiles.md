@@ -10,7 +10,7 @@
 ```
 > mvn clean package -DskipTests=true cargo:run -P postgres,jdbc
 ```
-После ключа -P через зяпятую указываются профили выбранные профили.
+После ключа -P через зяпятую указываются выбранные профили.
 
 Если приложение уже собрано (package), то его можно запустить без лишних команд: 
 ```
@@ -188,7 +188,7 @@
 ```
 
 ###Добавляем ActiveProfilesResolver
-Добавляем в приложение класс, который реализует интерфейс ActiveProfilesResolver
+Добавляем в приложение класс, который реализует интерфейс ActiveProfilesResolver, используемый для установки активного профиля.
 ```java
 import static ru.javawebinar.topjava.Profiles.HSQLDB;
 import static ru.javawebinar.topjava.Profiles.POSTGRES;
@@ -208,7 +208,7 @@ public class SpringActiveProfileResolver implements ActiveProfilesResolver {
 }
 ```
 ###Используем аннотацию @ActiveProfiles
-Добавляем аннотацию @ActiveProfiles с этим классом к базовому классу всех тестов
+Добавляем аннотацию @ActiveProfiles с этим классом к базовому тестовому классу.
 ```java
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -222,23 +222,23 @@ abstract public class AbstractServiceTest {
 }
 ```
 ###Настраиваем IDEA
-Чтобы запускать приложение внутри IDEA с разными конфигурациями и, при этом, не вносить изменения в код, в опциях VM настройки запуска приложения указываем необходимые профили
+Чтобы запускать приложение внутри IDEA с разными конфигурациями и, при этом, не вносить изменения в код, в опциях VM настройки запуска приложения указываем необходимые профили.
 ```
 -Dspring.profiles.active=postgres,jpa
 ```
 ![Run/debug config](runconfig.png) 
 
-Если не указывать профили, то при запуске приложения в IDEA будут использованы профили по умолчанию из **web.xml**:
+Если профили не указывать, то при запуске приложения в IDEA будут использованы профили по-умолчанию из **web.xml**:
 ```
     <context-param>
         <param-name>spring.profiles.default</param-name>
         <param-value>hsqldb,datajpa</param-value>
     </context-param>
 ```
-Желательно здесь настроить профили идентичные тем, которые выбраны по-умолчанию в **pom.xml**.
+Здесь желательно настроить профили идентичные тем, которые выбраны по-умолчанию в **pom.xml**.
 
 ###Запуск тестов в IDEA
-При запуске отдельного теста или тестового класса в IDEA, для выбора профиля БД используем Maven tool  
+При запуске отдельного теста или тестового класса в IDEA, для выбора профиля БД используем Maven tool.  
 ![Maven Tool](maventool.png)
 
 ###Рабочий пример 
