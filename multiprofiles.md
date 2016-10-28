@@ -1,4 +1,4 @@
-##Управляем запуском приложения Topjava и его тестов при помощи профилей MAVEN
+###Управляем запуском приложения Topjava и его тестов при помощи профилей MAVEN
 
 Данная настройка позволит выбирать один из трех профилей  БД API: **jdbc**, **jpa** и **datajpa**, и один из двух профилей БД: **hsqldb** и **postgres** для запуска приложения или тестов.
 
@@ -31,7 +31,7 @@
 ```
 > mvn test
 ```
-1. Редактируем pom.xml
+####Настраиваем pom.xml
 ```xml
 <project>
     ...
@@ -187,7 +187,7 @@
 </project>
 ```
 
-2. Добавляем в приложение класс, который реализует интерфейс ActiveProfilesResolver:
+####Добавляем в приложение класс, который реализует интерфейс ActiveProfilesResolver
 ```java
 import static ru.javawebinar.topjava.Profiles.HSQLDB;
 import static ru.javawebinar.topjava.Profiles.POSTGRES;
@@ -206,7 +206,7 @@ public class SpringActiveProfileResolver implements ActiveProfilesResolver {
     }
 }
 ```
-3. Добавляем аннотацию @ActiveProfiles с этим классом к базовому классу всех тестов:
+####Добавляем аннотацию @ActiveProfiles с этим классом к базовому классу всех тестов
 ```java
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -219,13 +219,13 @@ abstract public class AbstractServiceTest {
     ...
 }
 ```
-4. Чтобы запускать приложение внутри IDEA с разными конфигурациями и, при этом, не вносить изменения в код, в опциях VM настройки запуска приложения указываем необходимые профили:
+####Чтобы запускать приложение внутри IDEA с разными конфигурациями и, при этом, не вносить изменения в код, в опциях VM настройки запуска приложения указываем необходимые профили
 ```
 -Dspring.profiles.active=postgres,jpa
 ```
 ![Run/debug config](runconfig.png) 
 
-5. Если не указывать профили, то при запуске приложения в IDEA будут использованы профили по умолчанию из **web.xml**:
+Если не указывать профили, то при запуске приложения в IDEA будут использованы профили по умолчанию из **web.xml**:
 ```
     <context-param>
         <param-name>spring.profiles.default</param-name>
@@ -233,7 +233,9 @@ abstract public class AbstractServiceTest {
     </context-param>
 ```
 Желательно здесь настроить профили идентичные тем, которые выбраны по-умолчанию в **pom.xml**.
-6. При запуске отдельного теста или тестового класса в IDEA, для выбора профиля БД используем Maven tool:  
+
+####При запуске отдельного теста или тестового класса в IDEA, для выбора профиля БД используем Maven tool  
 ![Maven Tool](maventool.png)
 
-7. Рабочий пример: https://github.com/Cepr0/topjava/tree/HW06
+####Рабочий пример 
+https://github.com/Cepr0/topjava/tree/HW06
