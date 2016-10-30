@@ -18,6 +18,21 @@ function add() {
     $('#editRow').modal();
 }
 
+function edit() {
+    var mealId = $(this).attr("id");
+    var mealDateTime = $(this).children('.meal-dateTime').html();
+    var mealDescription = $(this).children('.meal-description').html();
+    var mealCalories = $(this).children('.meal-calories').html();
+
+    $('#id').val(mealId);
+    $('#dateTime').val(mealDateTime);
+    $('#description').val(mealDescription);
+    $('#calories').val(mealCalories);
+
+    $('#editRow').modal();
+}
+
+
 function deleteRow(id) {
     $.ajax({
         url: ajaxUrl + id,
@@ -31,11 +46,7 @@ function deleteRow(id) {
 
 function updateTable() {
     $.get(ajaxUrl, function (data) {
-        datatableApi.fnClearTable();
-        $.each(data, function (key, item) {
-            datatableApi.fnAddData(item);
-        });
-        datatableApi.fnDraw();
+        datatableApi.clear().rows.add(data).draw();
     });
 }
 

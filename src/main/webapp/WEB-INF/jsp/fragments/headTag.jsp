@@ -8,7 +8,16 @@
     <title><fmt:message key="app.title"/></title>
     <base href="${pageContext.request.contextPath}/"/>
 
+    <link rel="stylesheet" href="resources/css/normalize.css">
+    <link rel="stylesheet" href="webjars/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="webjars/datatables/css/jquery.dataTables.min.css">
+    <%--<link rel="stylesheet" href="webjars/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">--%>
+    <link rel="stylesheet" href="webjars/datetimepicker/jquery.datetimepicker.css">
     <link rel="stylesheet" href="resources/css/style.css">
-    <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bootstrap.min.css">
+
+
     <link rel="shortcut icon" href="resources/images/icon-meal.png">
+
+    <script type="text/javascript" src="webjars/jquery/jquery.min.js"></script>
+
 </head>
