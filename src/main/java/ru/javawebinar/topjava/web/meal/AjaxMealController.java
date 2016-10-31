@@ -46,12 +46,12 @@ public class AjaxMealController extends AbstractMealController {
     }
     
     
-    @PostMapping(value = "/filter}")
+    @PostMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MealWithExceed> getBetween(
-            @RequestParam("startDate") LocalDate startDate,
-            @RequestParam("startTime") LocalTime startTime,
-            @RequestParam("endDate") LocalDate endDate,
-            @RequestParam("endTime") LocalTime endTime) {
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(value = "startTime", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime startTime,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam(value = "endTime", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime endTime) {
         return super.getBetween(startDate, startTime, endDate, endTime);
     }
 }

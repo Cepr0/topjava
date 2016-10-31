@@ -24,7 +24,7 @@
 
         </div>
 
-        <form action="ajax/meals/filter" class="filter collapse in" id="filter">
+        <form method="post" class="filter collapse in" id="filterForm">
             <div class="row">
 
                 <div class="form-group col-xs-6 col-sm-6 col-md-3">
@@ -69,7 +69,7 @@
                 <button type="submit" name="mealFilterApply" value="on" class="btn btn-primary btn-xs">
                     <fmt:message key="meals.applyFilter"/>
                 </button>
-                <button type="submit" name="mealFilterReset" value="on" class="btn btn-default btn-xs">
+                <button name="mealFilterReset" value="on" class="btn btn-default btn-xs">
                     <fmt:message key="meals.resetFilter"/>
                 </button>
             </div>
@@ -140,12 +140,7 @@
                                             <input id="description" name="description" class="form-control" type="text" placeholder="Specify Meal description">
                                         </div>
                                     </div>
-                                    <!--<div class="form-group col-xs-12">-->
-                                    <!--<button type="submit" class="btn btn-primary">Submit</button>-->
-                                    <!--<button type="submit" class="btn btn-link">Cancel</button>-->
-                                    <!--</div>-->
                                 </fieldset>
-                                <!--</form>-->
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -159,7 +154,7 @@
     </div>
 
 </div>
-
+<div>
 <%--<section>--%>
 <%--<h3><fmt:message key="meals.title"/></h3>--%>
 
@@ -214,6 +209,7 @@
 <%--</c:forEach>--%>
 <%--</table>--%>
 <%--</section>--%>
+</div>
 
 <jsp:include page="fragments/footer.jsp"/>
 </body>
@@ -274,6 +270,19 @@
             $('#editRow').modal('hide');
             deleteRow(mealId);
         });
+
+        $('#filterForm').submit(function () {
+            $.ajax({
+                type: "POST",
+                url: ajaxUrl + 'filter',
+                data: $(this).serialize(),
+                success: function (data) {
+                    datatableApi.clear().rows.add(data).draw();
+                }
+            });
+            return false;
+        });
+
     });
 
     makeEditable();
