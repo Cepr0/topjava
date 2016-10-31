@@ -89,7 +89,7 @@
             <tbody>
             <c:forEach items="${meals}" var="meal">
                 <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>
-                <tr id="${meal.id}" onclick="edit()" class="${meal.exceed ? 'danger' : ''}">
+                <tr id="${meal.id}" class="${meal.exceed ? 'danger' : ''}">
                     <td class="meal-dateTime">${fn:formatDateTime(meal.dateTime)}</td>
                     <td class="meal-description">${meal.description}</td>
                     <td class="meal-calories">${meal.calories}</td>
@@ -111,9 +111,9 @@
                     <h4 class="modal-title" id="myModalLabel"><fmt:message key="meals.edit"/></h4></div>
                     <form id="detailsForm" method="post">
                         <div class="modal-body">
+                            <%--Meal ID--%>
                             <input type="text" hidden="hidden" id="id" name="id" title="id">
                             <div class="row">
-                                <!--<form class="col-xs-12">-->
                                 <fieldset>
                                     <!--<legend class="text-info text-uppercase">-->
                                     <!--<i class="fa fa-check-square-o"></i> Meal-->
@@ -150,7 +150,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary" data-action="modal">Save</button>
-                            <button type="button" class="btn btn-default" data-toggle="modal">Delete</button>
+                            <button id="meal-delete" type="button" class="btn btn-default" data-toggle="modal">Delete</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </form>
@@ -219,7 +219,7 @@
 </body>
 <jsp:include page="fragments/pageFooter.jsp"/>
 
-<script>
+<script type="text/javascript">
     var ajaxUrl = 'ajax/meals/';
     var datatableApi;
 
@@ -254,11 +254,29 @@
             dayOfWeekStart: 1,
             step: 30
         });
+
+        $('#mealsTable tr').click(function () {
+            var mealId = $(this).attr("id");
+            var mealDateTime = $(this).find('td.meal-dateTime').html();
+            var mealDescription = $(this).find('td.meal-description').html();
+            var mealCalories = $(this).find('td.meal-calories').html();
+
+            $('#id').val(mealId);
+            $('#dateTime').val(mealDateTime);
+            $('#description').val(mealDescription);
+            $('#calories').val(mealCalories);
+
+            $('#editRow').modal();
+        });
+
+        $('#meal-delete').click(function () {
+            var mealId = $('#id').val();
+            $('#editRow').modal('hide');
+            deleteRow(mealId);
+        });
     });
 
     makeEditable();
-
-
 
 </script>
 </html>
