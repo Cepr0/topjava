@@ -23,7 +23,7 @@
 
         </div>
 
-        <form method="post" class="filter collapse in" id="filterForm">
+        <form method="post" class="filter collapse" id="filterForm">
             <div class="row">
 
                 <div class="form-group col-xs-6 col-sm-6 col-md-3">
@@ -307,8 +307,10 @@
         });
 
         $("#mealFilterReset").click(function () {
-            $('#filterForm').find('input').val(null);
+            var filterForm = $('#filterForm');
+            filterForm.find('input').val(null);
             fillTableWithData.call(this);
+            filterForm.collapse('hide');
             return false;
         })
 
