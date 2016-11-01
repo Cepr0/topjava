@@ -19,6 +19,6 @@
 
     <link rel="shortcut icon" href="resources/images/icon-meal.png">
 
-    <script type="text/javascript" src="webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="webjars/jquery/3.1.1/dist/jquery.min.js"></script>
 
 </head>

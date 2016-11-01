@@ -262,41 +262,41 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
-            <version>RELEASE</version>
+            <version>${webjars-jquery.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
             <version>${webjars-bootstrap.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>org.webjars</artifactId>
-                    <groupId>jquery</groupId>
-                </exclusion>
-            </exclusions>
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<artifactId>org.webjars</artifactId>-->
+                    <!--<groupId>jquery</groupId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
         </dependency>
-        <dependency>
-            <groupId>org.webjars.npm</groupId>
-            <artifactId>eonasdan-bootstrap-datetimepicker</artifactId>
-            <version>4.17.42</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.webjars.npm</groupId>
-                    <artifactId>jquery</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.webjars.npm</groupId>
-                    <artifactId>bootstrap</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.webjars.npm</groupId>-->
+            <!--<artifactId>eonasdan-bootstrap-datetimepicker</artifactId>-->
+            <!--<version>4.17.42</version>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.webjars.npm</groupId>-->
+                    <!--<artifactId>jquery</artifactId>-->
+                <!--</exclusion>-->
+                <!--<exclusion>-->
+                    <!--<groupId>org.webjars.npm</groupId>-->
+                    <!--<artifactId>bootstrap</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>datetimepicker</artifactId>
             <version>${webjars-datetimepicker.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>org.webjars</artifactId>
+                    <artifactId>org.webjars.bower</artifactId>
                     <groupId>jquery</groupId>
                 </exclusion>
             </exclusions>
