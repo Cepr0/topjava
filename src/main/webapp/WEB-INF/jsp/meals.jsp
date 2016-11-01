@@ -10,11 +10,9 @@
 
 <div class="container">
     <div class="well">
+
+        <%--Meal window caption and filter toggle button--%>
         <div class="caption">
-            <!--<a class="btn btn-default btn-xs" role="button" data-toggle="collapse" href="#filter" aria-expanded="false"-->
-            <!--aria-controls="filter">-->
-            <!--Filter <span class="caret"></span>-->
-            <!--</a>-->
             <button class="btn btn-default btn-xs text-uppercase" data-toggle="collapse" data-target="#filterForm">
                 <fmt:message key="meals.toggleFilter"/>
                 <span class="caret"></span>
@@ -23,6 +21,7 @@
 
         </div>
 
+        <%--Filter form--%>
         <form method="post" class="filter collapse" id="filterForm">
             <div class="row">
 
@@ -74,6 +73,7 @@
             </div>
         </form>
 
+        <%--New Meal button--%>
         <a class="btn btn-sm btn-primary" onclick="add()"><fmt:message key="meals.add"/></a>
 
         <!--Meals table-->
@@ -87,13 +87,6 @@
             </tr>
             </thead>
             <tbody>
-            <%--<c:forEach items="${meals}" var="meal">--%>
-                <%--<jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>--%>
-                <%--<tr id="${meal.id}" class="${meal.exceed ? 'danger' : ''}">--%>
-                    <%--<td class="meal-dateTime">${fn:formatDateTime(meal.dateTime)}</td>--%>
-                    <%--<td class="meal-description">${meal.description}</td>--%>
-                    <%--<td class="meal-calories">${meal.calories}</td>--%>
-            <%--</c:forEach>--%>
                 <tr>
                     <td class="meal-dateTime"></td>
                     <td class="meal-description"></td>
@@ -102,9 +95,10 @@
             </tbody>
 
         </table>
+
     </div>
 
-    <!-- Modal -->
+    <!-- Modal Edit Meal Dialog-->
     <div class="modal fade" id="editRow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -158,62 +152,6 @@
     </div>
 
 </div>
-<div>
-<%--<section>--%>
-<%--<h3><fmt:message key="meals.title"/></h3>--%>
-
-<%--<form method="post" action="meals/filter">--%>
-<%--<dl>--%>
-<%--<dt><fmt:message key="meals.startDate"/>:</dt>--%>
-<%--<dd><input type="date" name="startDate" value="${param.startDate}"></dd>--%>
-<%--</dl>--%>
-<%--<dl>--%>
-<%--<dt><fmt:message key="meals.endDate"/>:</dt>--%>
-<%--<dd><input type="date" name="endDate" value="${param.endDate}"></dd>--%>
-<%--</dl>--%>
-<%--<dl>--%>
-<%--<dt><fmt:message key="meals.startTime"/>:</dt>--%>
-<%--<dd><input type="time" name="startTime" value="${param.startTime}"></dd>--%>
-<%--</dl>--%>
-<%--<dl>--%>
-<%--<dt><fmt:message key="meals.endTime"/>:</dt>--%>
-<%--<dd><input type="time" name="endTime" value="${param.endTime}"></dd>--%>
-<%--</dl>--%>
-<%--<button type="submit"><fmt:message key="meals.filter"/></button>--%>
-<%--</form>--%>
-<%--<hr>--%>
-<%--<a href="meals/create"><fmt:message key="meals.add"/></a>--%>
-
-<%--<hr>--%>
-
-
-<%--<table border="1" cellpadding="8" cellspacing="0">--%>
-<%--<thead>--%>
-<%--<tr>--%>
-<%--<th><fmt:message key="meals.dateTime"/></th>--%>
-<%--<th><fmt:message key="meals.description"/></th>--%>
-<%--<th><fmt:message key="meals.calories"/></th>--%>
-<%--<th></th>--%>
-<%--<th></th>--%>
-<%--</tr>--%>
-<%--</thead>--%>
-<%--<c:forEach items="${meals}" var="meal">--%>
-<%--<jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>--%>
-<%--<tr class="${meal.exceed ? 'exceeded' : 'normal'}">--%>
-<%--<td>--%>
-<%--&lt;%&ndash;${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}&ndash;%&gt;--%>
-<%--&lt;%&ndash;<%=TimeUtil.toString(meal.getDateTime())%>&ndash;%&gt;--%>
-<%--${fn:formatDateTime(meal.dateTime)}--%>
-<%--</td>--%>
-<%--<td>${meal.description}</td>--%>
-<%--<td>${meal.calories}</td>--%>
-<%--<td><a href="meals/update?id=${meal.id}"><fmt:message key="common.update"/></a></td>--%>
-<%--<td><a href="meals/delete?id=${meal.id}"><fmt:message key="common.delete"/></a></td>--%>
-<%--</tr>--%>
-<%--</c:forEach>--%>
-<%--</table>--%>
-<%--</section>--%>
-</div>
 
 <jsp:include page="fragments/footer.jsp"/>
 </body>
@@ -223,19 +161,10 @@
     var ajaxUrl = 'ajax/meals/';
     var datatableApi;
 
-    function fillTableWithData(filterForm) {
-        $.ajax({
-            type: "POST",
-            url: ajaxUrl + "filter",
-            data: filterForm != null ? $(filterForm).serialize() : "",
-            success: function (data) {
-                datatableApi.clear().rows.add(data).draw();
-            }
-        });
-    }
-
+    // After page loading
     $(function () {
 
+        // Init DataTable
         datatableApi = $('#mealsTable').DataTable({
             paging: false,
             info: false,
@@ -252,7 +181,8 @@
             }
         });
 
-        fillTableWithData();
+        // First update after init DataTable
+        updateTable();
 
         $.datetimepicker.setLocale('ru');
 
@@ -288,29 +218,24 @@
             $('#editRow').modal();
         });
 
+        // In edit form on Delete click handle
         $('#meal-delete').click(function () {
             var mealId = $('#id').val();
             $('#editRow').modal('hide');
             deleteRow(mealId);
         });
 
+        // Filter submit handle
         $('#filterForm').submit(function () {
-            fillTableWithData($(this));
-//            $.ajax({
-//                type: "POST",
-//                url: ajaxUrl + 'filter',
-//                data: $(this).serialize(),
-//                success: function (data) {
-//                    datatableApi.clear().rows.add(data).draw();
-//                }
-//            });
+            updateTable($(this));
             return false;
         });
 
+        // Filter delete handle
         $("#mealFilterReset").click(function () {
             var filterForm = $('#filterForm');
-            filterForm.find('input').val(null);
-            fillTableWithData();
+            filterForm.find('input').val(null); // Clearing all input fields
+            updateTable();
             filterForm.collapse('hide');
             return false;
         })

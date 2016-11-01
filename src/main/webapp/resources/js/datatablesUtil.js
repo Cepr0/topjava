@@ -29,16 +29,27 @@ function deleteRow(id) {
         url: ajaxUrl + id,
         type: 'DELETE',
         success: function () {
-            updateTable();
+            updateTable($("#filterForm"));
             successNoty('Deleted');
         }
     });
 }
 
-function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        datatableApi.clear().rows.add(data).draw();
-    });
+function updateTable(filterForm) {
+    if (filterForm != null && filterForm.attr("id") == "filterForm") {
+        $.ajax({
+            type: "POST",
+            url: ajaxUrl + "filter",
+            data: filterForm != null ? $(filterForm).serialize() : "",
+            success: function (data) {
+                datatableApi.clear().rows.add(data).draw();
+            }
+        });
+    } else {
+        $.get(ajaxUrl, function (data) {
+            datatableApi.clear().rows.add(data).draw();
+        });
+    }
 }
 
 function save() {
@@ -49,7 +60,7 @@ function save() {
         data: form.serialize(),
         success: function () {
             $('#editRow').modal('hide');
-            updateTable();
+            updateTable($("#filterForm"));
             successNoty('Saved');
         }
     });
