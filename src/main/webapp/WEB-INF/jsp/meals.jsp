@@ -228,7 +228,12 @@
                 {data: "description", className: "meal-description"},
                 {data: "calories", className: "meal-calories"}],
             order: [[0, "desc"]],
-            rowId: 'id'
+            rowId: 'id',
+            "createdRow": function ( row, data, index ) {
+                if ( data["exceed"] == true ) {
+                    $(row).addClass('danger');
+                }
+            }
         });
 
         $.datetimepicker.setLocale('ru');
