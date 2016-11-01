@@ -277,16 +277,13 @@
             step: 30
         });
 
-        $('#mealsTable').delegate("tbody > tr", "click", function() {
-            var mealId = $(this).attr("id");
-            var mealDateTime = $(this).find('td.meal-dateTime').html();
-            var mealDescription = $(this).find('td.meal-description').html();
-            var mealCalories = $(this).find('td.meal-calories').html();
-
-            $('#id').val(mealId);
-            $('#dateTime').val(mealDateTime);
-            $('#description').val(mealDescription);
-            $('#calories').val(mealCalories);
+        // On table row click handle
+        // Get the current row data and fire editRow modal dialog
+        $("#mealsTable tbody").on("click", "tr", function() {
+            $('#id').val($(this).attr("id"));
+            $('#dateTime').val($(this).find('td.meal-dateTime').html());
+            $('#description').val($(this).find('td.meal-description').html());
+            $('#calories').val($(this).find('td.meal-calories').html());
 
             $('#editRow').modal();
         });
