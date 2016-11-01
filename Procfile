@@ -1,1 +1,1 @@
-web:    java $JAVA_OPTS -Dspring.profiles.active=hsqldb,datajpa -jar target/dependency/webapp-runner.jar --port $PORT target/*.war
+web:    java $JAVA_OPTS -Dspring.profiles.active=postgres,datajpa -jar target/dependency/webapp-runner.jar --port $PORT target/*.war
