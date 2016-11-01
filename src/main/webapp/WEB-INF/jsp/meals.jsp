@@ -223,11 +223,11 @@
     var ajaxUrl = 'ajax/meals/';
     var datatableApi;
 
-    function fillTableWithData() {
+    function fillTableWithData(filterForm) {
         $.ajax({
             type: "POST",
             url: ajaxUrl + "filter",
-            data: $(this).serialize(),
+            data: filterForm != null ? $(filterForm).serialize() : "",
             success: function (data) {
                 datatableApi.clear().rows.add(data).draw();
             }
@@ -295,21 +295,22 @@
         });
 
         $('#filterForm').submit(function () {
-            $.ajax({
-                type: "POST",
-                url: ajaxUrl + 'filter',
-                data: $(this).serialize(),
-                success: function (data) {
-                    datatableApi.clear().rows.add(data).draw();
-                }
-            });
+            fillTableWithData($(this));
+//            $.ajax({
+//                type: "POST",
+//                url: ajaxUrl + 'filter',
+//                data: $(this).serialize(),
+//                success: function (data) {
+//                    datatableApi.clear().rows.add(data).draw();
+//                }
+//            });
             return false;
         });
 
         $("#mealFilterReset").click(function () {
             var filterForm = $('#filterForm');
             filterForm.find('input').val(null);
-            fillTableWithData.call(this);
+            fillTableWithData();
             filterForm.collapse('hide');
             return false;
         })
