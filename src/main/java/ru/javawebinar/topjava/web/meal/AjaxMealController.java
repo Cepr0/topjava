@@ -24,7 +24,7 @@ public class AjaxMealController extends AbstractMealController {
     public List<MealWithExceed> getAll() {
         return super.getAll();
     }
-    
+
     @DeleteMapping("/{id}")
     @Override
     public void delete(@PathVariable("id") int id) {

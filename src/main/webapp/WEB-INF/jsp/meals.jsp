@@ -15,7 +15,7 @@
             <!--aria-controls="filter">-->
             <!--Filter <span class="caret"></span>-->
             <!--</a>-->
-            <button class="btn btn-default btn-xs text-uppercase" type="submit" data-toggle="collapse" data-target="#filterForm">
+            <button class="btn btn-default btn-xs text-uppercase" data-toggle="collapse" data-target="#filterForm">
                 <fmt:message key="meals.toggleFilter"/>
                 <span class="caret"></span>
             </button>
@@ -65,10 +65,10 @@
             </div>
 
             <div class="actions">
-                <button type="submit" name="mealFilterApply" value="on" class="btn btn-primary btn-xs">
+                <button type="submit" name="mealFilterApply" class="btn btn-primary btn-xs">
                     <fmt:message key="meals.applyFilter"/>
                 </button>
-                <button name="mealFilterReset" value="on" class="btn btn-default btn-xs">
+                <button id="mealFilterReset" name="mealFilterReset" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#filterForm">
                     <fmt:message key="meals.resetFilter"/>
                 </button>
             </div>
@@ -76,6 +76,7 @@
 
         <a class="btn btn-sm btn-primary" onclick="add()"><fmt:message key="meals.add"/></a>
 
+        <!--Meals table-->
         <table class="table table-hover" id="mealsTable">
             <!--<caption>Optional table caption.</caption>-->
             <thead>
@@ -86,14 +87,18 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach items="${meals}" var="meal">
-                <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>
-                <tr id="${meal.id}" class="${meal.exceed ? 'danger' : ''}">
-                    <td class="meal-dateTime">${fn:formatDateTime(meal.dateTime)}</td>
-                    <td class="meal-description">${meal.description}</td>
-                    <td class="meal-calories">${meal.calories}</td>
+            <%--<c:forEach items="${meals}" var="meal">--%>
+                <%--<jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>--%>
+                <%--<tr id="${meal.id}" class="${meal.exceed ? 'danger' : ''}">--%>
+                    <%--<td class="meal-dateTime">${fn:formatDateTime(meal.dateTime)}</td>--%>
+                    <%--<td class="meal-description">${meal.description}</td>--%>
+                    <%--<td class="meal-calories">${meal.calories}</td>--%>
+            <%--</c:forEach>--%>
+                <tr>
+                    <td class="meal-dateTime"></td>
+                    <td class="meal-description"></td>
+                    <td class="meal-calories"></td>
                 </tr>
-            </c:forEach>
             </tbody>
 
         </table>
@@ -218,6 +223,17 @@
     var ajaxUrl = 'ajax/meals/';
     var datatableApi;
 
+    function fillTableWithData() {
+        $.ajax({
+            type: "POST",
+            url: ajaxUrl + "filter",
+            data: $(this).serialize(),
+            success: function (data) {
+                datatableApi.clear().rows.add(data).draw();
+            }
+        });
+    }
+
     $(function () {
 
         datatableApi = $('#mealsTable').DataTable({
@@ -235,6 +251,8 @@
                 }
             }
         });
+
+        fillTableWithData();
 
         $.datetimepicker.setLocale('ru');
 
@@ -259,7 +277,7 @@
             step: 30
         });
 
-        $('#mealsTable').delegate("tr", "click", function() {
+        $('#mealsTable').delegate("tbody > tr", "click", function() {
             var mealId = $(this).attr("id");
             var mealDateTime = $(this).find('td.meal-dateTime').html();
             var mealDescription = $(this).find('td.meal-description').html();
@@ -290,6 +308,12 @@
             });
             return false;
         });
+
+        $("#mealFilterReset").click(function () {
+            $('#filterForm').find('input').val(null);
+            fillTableWithData.call(this);
+            return false;
+        })
 
     });
 

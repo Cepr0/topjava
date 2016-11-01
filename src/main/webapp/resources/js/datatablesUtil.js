@@ -10,6 +10,7 @@ function makeEditable() {
 
     $('#editRow').on('hidden.bs.modal', function (e) {
         $('#detailsForm').find('input').val(null);
+        $("#meal-delete").show();
     });
     
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
@@ -19,6 +20,7 @@ function makeEditable() {
 
 function add() {
     $('#id').val(null);
+    $("#meal-delete").hide();
     $('#editRow').modal();
 }
 
