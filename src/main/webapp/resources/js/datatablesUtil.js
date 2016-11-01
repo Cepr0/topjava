@@ -8,6 +8,10 @@ function makeEditable() {
         return false;
     });
 
+    $('#editRow').on('hidden.bs.modal', function (e) {
+        $('#detailsForm').find('input').val(null);
+    });
+    
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(event, jqXHR, options, jsExc);
     });

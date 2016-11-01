@@ -15,8 +15,7 @@
             <!--aria-controls="filter">-->
             <!--Filter <span class="caret"></span>-->
             <!--</a>-->
-            <button class="btn btn-default btn-xs text-uppercase" type="submit" data-toggle="collapse"
-                    data-target="#filter">
+            <button class="btn btn-default btn-xs text-uppercase" type="submit" data-toggle="collapse" data-target="#filterForm">
                 <fmt:message key="meals.toggleFilter"/>
                 <span class="caret"></span>
             </button>
@@ -28,7 +27,7 @@
             <div class="row">
 
                 <div class="form-group col-xs-6 col-sm-6 col-md-3">
-                    <label for="startDate">From date</label>
+                    <label for="startDate"><fmt:message key="meals.startDate"/></label>
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                         <input type="text" class="form-control date-field" id="startDate" name="startDate"
@@ -37,7 +36,7 @@
                 </div>
 
                 <div class="form-group col-xs-6 col-sm-6 col-md-3">
-                    <label for="endDate">To date</label>
+                    <label for="endDate"><fmt:message key="meals.endDate"/></label>
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                         <input type="text" class="form-control date-field" id="endDate" name="endDate"
@@ -46,7 +45,7 @@
                 </div>
 
                 <div class="form-group col-xs-6 col-sm-6 col-md-3">
-                    <label for="startTime">From time</label>
+                    <label for="startTime"><fmt:message key="meals.startTime"/></label>
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                         <input type="text" class="form-control time-field" id="startTime" name="startTime"
@@ -55,7 +54,7 @@
                 </div>
 
                 <div class="form-group col-xs-6 col-sm-6 col-md-3">
-                    <label for="endTime">To time</label>
+                    <label for="endTime"><fmt:message key="meals.endTime"/></label>
                     <div class="input-group date">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                         <input type="text" class="form-control time-field" id="endTime" name="endDate"
@@ -119,14 +118,14 @@
                                     <!--<i class="fa fa-check-square-o"></i> Meal-->
                                     <!--</legend>-->
                                     <div class="form-group col-xs-12 col-sm-6">
-                                        <label for="dateTime">Mealtime</label>
+                                        <label for="dateTime"><fmt:message key="meals.dateTime"/></label>
                                         <div class="input-group date">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                             <input type="text" class="form-control" id="dateTime" name="dateTime" placeholder="Specify a mealtime"/>
                                         </div>
                                     </div>
                                     <div class="form-group col-xs-12 col-sm-6">
-                                        <label for="calories">Calories</label>
+                                        <label for="calories"><fmt:message key="meals.calories"/></label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-signal"></i></span>
                                             <input id="calories" name="calories" class="form-control" type="number" min="5" max="5000"
@@ -134,7 +133,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group col-xs-12">
-                                        <label for="description">Description</label>
+                                        <label for="description"><fmt:message key="meals.description"/></label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-tags"></i></span>
                                             <input id="description" name="description" class="form-control" type="text" placeholder="Specify Meal description">
@@ -144,9 +143,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" data-action="modal">Save</button>
-                            <button id="meal-delete" type="button" class="btn btn-default" data-toggle="modal">Delete</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" data-action="modal"><fmt:message key="common.apply"/></button>
+                            <button id="meal-delete" type="button" class="btn btn-default" data-toggle="modal"><fmt:message key="common.delete"/></button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="common.cancel"/></button>
                         </div>
                     </form>
             </div>
@@ -223,9 +222,13 @@
 
         datatableApi = $('#mealsTable').DataTable({
             paging: false,
-            info: true,
-            columns: [{"data": "dateTime"}, {"data": "description"}, {"data": "calories"}],
-            order: [[0, "desc"]]
+            info: false,
+            columns: [
+                {data: "dateTime", className: "meal-dateTime"},
+                {data: "description", className: "meal-description"},
+                {data: "calories", className: "meal-calories"}],
+            order: [[0, "desc"]],
+            rowId: 'id'
         });
 
         $.datetimepicker.setLocale('ru');
@@ -251,7 +254,7 @@
             step: 30
         });
 
-        $('#mealsTable tr').click(function () {
+        $('#mealsTable').delegate("tr", "click", function() {
             var mealId = $(this).attr("id");
             var mealDateTime = $(this).find('td.meal-dateTime').html();
             var mealDescription = $(this).find('td.meal-description').html();
