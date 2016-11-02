@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="webjars/bootstrap/css/bootstrap.min.css">
     <%--<link rel="stylesheet" href="webjars/datatables/css/jquery.dataTables.min.css">--%>
     <link rel="stylesheet" href="webjars/datatables/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="webjars/datatables.net-buttons-bs/1.2.2/css/buttons.bootstrap.css">
     <%--<link rel="stylesheet" href="webjars/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css">--%>
     <link rel="stylesheet" href="webjars/datetimepicker/jquery.datetimepicker.css">
     <link rel="stylesheet" href="resources/css/style.css">
