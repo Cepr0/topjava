@@ -168,6 +168,10 @@
         datatableApi = $('#mealsTable').DataTable({
             paging: false,
             info: false,
+            ajax: {
+                url: ajaxUrl,
+                dataSrc: ''
+            },
             columns: [
                 {data: "dateTime", className: "meal-dateTime"},
                 {data: "description", className: "meal-description"},
@@ -182,7 +186,7 @@
         });
 
         // First update after init DataTable
-        updateTable();
+        //updateTable();
 
         $.datetimepicker.setLocale('ru');
 
