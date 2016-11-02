@@ -311,6 +311,16 @@
             <artifactId>datatables</artifactId>
             <version>${webjars-datatables.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>datatables.net-buttons-bs</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>datatables.net-buttons</artifactId>
+            <version>1.2.2</version>
+        </dependency>
 
         <!--JSON-->
         <dependency>

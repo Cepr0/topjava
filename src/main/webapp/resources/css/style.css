@@ -36,36 +36,9 @@ body {
     background-color: #9d9d9d;
 }
 
-h1, .h1, h2, .h2, h3, .h3 {
-    /*margin-top: 10px;*/
-    /*margin-bottom: 10px;*/
-}
-
 .navbar {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
-
-.navbar-default a.navbar-brand {
-    /*font-family: 'Condiment', cursive;*/
-    /*font-size: 28px;*/
-    /*color: #2b679c;*/
-    /*padding-top: 1px; !*17px;*!*/
-}
-
-.navbar-default .navbar-brand:hover {
-    /*color: #337ab7;*/
-}
-
-i.tracker {
-    position: absolute;
-    top: 8px;
-    left: 185px;
-    font-size: 12px;
-    /*color: #2b679c;*/
-}
-/*i.tracker:hover {*/
-/*color: #337ab7;*/
-/*}*/
 
 .navbar-header .dropdown-menu {
     margin-top: 0;
@@ -177,3 +150,13 @@ form.filter .actions {
     text-shadow: 2px 2px 1px rgba(255, 255, 255, 0.2);
 }
 
+/*DataTable corrections*/
+@media screen and (max-width: 767px) {
+    .dt-buttons {
+        width: inherit !important;
+    }
+}
+
+div.dataTables_wrapper div.dataTables_filter {
+    float: right;
+}

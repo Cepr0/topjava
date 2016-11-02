@@ -62,22 +62,23 @@
                 </div>
 
             </div>
-
-            <div class="actions">
-                <button type="submit" name="mealFilterApply" class="btn btn-primary btn-xs">
-                    <fmt:message key="meals.applyFilter"/>
-                </button>
-                <button id="mealFilterReset" name="mealFilterReset" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#filterForm">
-                    <fmt:message key="meals.resetFilter"/>
-                </button>
+            <div class="row">
+                <div class="pull-right col-xs-12" style="width: inherit;">
+                    <button type="submit" name="mealFilterApply" class="btn btn-primary btn-xs">
+                        <fmt:message key="meals.applyFilter"/>
+                    </button>
+                    <button id="mealFilterReset" name="mealFilterReset" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#filterForm">
+                        <fmt:message key="meals.resetFilter"/>
+                    </button>
+                </div>
             </div>
         </form>
 
         <%--New Meal button--%>
-        <a class="btn btn-sm btn-primary" onclick="add()"><fmt:message key="meals.add"/></a>
+        <%--<a class="btn btn-sm btn-primary" onclick="add()"><fmt:message key="meals.add"/></a>--%>
 
         <!--Meals table-->
-        <table class="table table-hover" id="mealsTable">
+        <table class="table table-hover compact" id="mealsTable">
             <!--<caption>Optional table caption.</caption>-->
             <thead>
             <tr>
@@ -161,6 +162,14 @@
     var ajaxUrl = 'ajax/meals/';
     var datatableApi;
 
+    $.fn.dataTable.ext.buttons.mealAdd = {
+        className: 'btn btn-sm btn-primary',
+
+        action: function ( e, dt, node, config ) {
+            add();
+        }
+    };
+
     // After page loading
     $(function () {
 
@@ -168,10 +177,12 @@
         datatableApi = $('#mealsTable').DataTable({
             paging: false,
             info: false,
-            ajax: {
-                url: ajaxUrl,
-                dataSrc: ''
-            },
+            dom: 'Bft',
+            buttons: [{extend: 'mealAdd', text: '<fmt:message key="meals.add"/>'}],
+//            ajax: {
+//                url: ajaxUrl,
+//                dataSrc: ''
+//            },
             columns: [
                 {data: "dateTime", className: "meal-dateTime"},
                 {data: "description", className: "meal-description"},
@@ -180,13 +191,13 @@
             rowId: 'id',
             "createdRow": function ( row, data, index ) {
                 if ( data["exceed"] == true ) {
-                    $(row).addClass('danger');
+                    $(row).addClass('text-danger');
                 }
             }
         });
 
         // First update after init DataTable
-        //updateTable();
+        updateTable();
 
         $.datetimepicker.setLocale('ru');
 
