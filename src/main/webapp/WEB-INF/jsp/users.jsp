@@ -17,23 +17,25 @@
         <!--Meals table-->
         <table class="table table-hover table-condensed" id="usersTable">
             <thead>
-            <tr>
-                <th><fmt:message key="users.name"/></th>
-                <th><fmt:message key="users.email"/></th>
-                <th><fmt:message key="users.roles"/></th>
-                <th><fmt:message key="users.active"/></th>
-                <th><fmt:message key="users.registered"/></th>
-                <th></th>
-                <th></th>
-            </tr>
+                <tr>
+                    <th><fmt:message key="users.name"/></th>
+                    <th><fmt:message key="users.email"/></th>
+                    <th><fmt:message key="users.roles"/></th>
+                    <th><fmt:message key="users.active"/></th>
+                    <th><fmt:message key="users.registered"/></th>
+                    <th></th>
+                    <th></th>
+                </tr>
             </thead>
-            <tr>
-                <td class="user-name"></td>
-                <td class="user-email"></td> <%--<a href="mailto:${user.email}">${user.email}</a>--%>
-                <td class="user-roles"></td>
-                <td class="user-enabled"></td> <%--<input type="checkbox" <c:if test="${user.enabled}">checked</c:if> id="${user.id}"/>--%>
-                <td class="user-registered"></td>
-            </tr>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </div>
@@ -87,7 +89,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" data-action="modal"><fmt:message key="common.apply"/></button>
-                        <button id="meal-delete" type="button" class="btn btn-default" data-toggle="modal"><fmt:message key="common.delete"/></button>
+                        <button id="action-delete" type="button" class="btn btn-default" data-toggle="modal"><fmt:message key="common.delete"/></button>
                         <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="common.cancel"/></button>
                     </div>
                 </form>
@@ -197,6 +199,7 @@
 
     var ajaxUrl = 'ajax/admin/users/';
     var datatableApi;
+    var chechBoxEvent = false;
 
     $.fn.dataTable.ext.buttons.add = {
         className: 'btn btn-sm btn-primary',
@@ -219,16 +222,19 @@
                 search: "",
                 searchPlaceholder: 'Search in table'
             },
-
             columns: [
-                {data: "name"}, {data: "email"}, {data: "roles"}, {data: "enabled"}, {data: "registered"}/*,*/
-//                {defaultContent: "Edit", orderable: false}, {defaultContent: "Delete", orderable: false}
+                {data: "name", className: "user-name"},
+                {data: "email", className: "user-email"},
+                {data: "roles", className: "user-roles"},
+                {data: "enabled", className: "user-enabled"},
+                {data: "registered", className: "user-registered"}
             ], order: [[0, "asc"]],
 
-            rowId: 'id'/*,
+            rowId: 'id',
 
-            "createdRow": function ( row, data, index ) {
-                var inputCheckBox;
+            "rowCallback": function ( row, data, index ) {
+
+                var enabler = 'onclick=enableDisable('+ data["id"] + ')';
 
                 if ( data["enabled"] == true ) {
                     inputCheckBox = '<input type="checkbox" checked/>';
@@ -237,14 +243,34 @@
                     inputCheckBox = '<input type="checkbox"/>';
                 }
 
-                $(row + ".dt.user-enabled").append(inputCheckBox);
+                //$("td.user-enabled", row).attr('onclick', enabler);
+                $("td.user-enabled", row).html(inputCheckBox);
 
                 var aEmail = '<a href="mailto:' + data["email"] + '">' + data["email"] + '</a>';
-                $(row + ".dt.user-email").append(aEmail);
-            }*/
+                $("td.user-email", row).html(aEmail);
+            }
         });
 
         updateTable();
+
+
+        $("#usersTable tbody").on("change", "input", function () {
+            chechBoxEvent = true;
+            var id = $(this).parent().parent().attr("id");
+            enableDisable(id);
+        });
+
+        $("#usersTable tbody").on("click", "tr", function () {
+            if (chechBoxEvent != true) {
+                $('#id').val($(this).attr("id"));
+                $('#name').val($(this).find('td.user-name').text());
+                $('#email').val($(this).find('td.user-email').text());
+                $('#password').val($(this).find('td.user-password').text());
+
+                $('#editRow').modal();
+            }
+            chechBoxEvent = false;
+        });
 
         makeEditable();
     });

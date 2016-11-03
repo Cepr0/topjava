@@ -144,7 +144,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary" data-action="modal"><fmt:message key="common.apply"/></button>
-                            <button id="meal-delete" type="button" class="btn btn-default" data-toggle="modal"><fmt:message key="common.delete"/></button>
+                            <button id="action-delete" type="button" class="btn btn-default" data-toggle="modal"><fmt:message key="common.delete"/></button>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="common.cancel"/></button>
                         </div>
                     </form>
@@ -237,13 +237,6 @@
             $('#calories').val($(this).find('td.meal-calories').html());
 
             $('#editRow').modal();
-        });
-
-        // In edit form on Delete click handle
-        $('#meal-delete').click(function () {
-            var mealId = $('#id').val();
-            $('#editRow').modal('hide');
-            deleteRow(mealId);
         });
 
         // Filter submit handle

@@ -23,7 +23,12 @@ public class AdminAjaxController extends AbstractUserController {
     public void delete(@PathVariable("id") int id) {
         super.delete(id);
     }
-
+    
+    @PostMapping("/{id}")
+    public void enableDisable(@PathVariable("id") int id) {
+        super.enableDisable(id);
+    }
+    
     @PostMapping
     public void createOrUpdate(@RequestParam("id") Integer id,
                                @RequestParam("name") String name,

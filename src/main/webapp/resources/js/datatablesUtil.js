@@ -10,9 +10,16 @@ function makeEditable() {
 
     $('#editRow').on('hidden.bs.modal', function (e) {
         $('#detailsForm').find('input').val(null);
-        $("#meal-delete").show();
+        $("#action-delete").show();
     });
-    
+
+    // In edit form on Delete click handle
+    $('#action-delete').click(function () {
+        var mealId = $('#id').val();
+        $('#editRow').modal('hide');
+        deleteRow(mealId);
+    });
+
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(event, jqXHR, options, jsExc);
     });
@@ -20,7 +27,7 @@ function makeEditable() {
 
 function add() {
     $('#id').val(null);
-    $("#meal-delete").hide();
+    $("#action-delete").hide();
     $('#editRow').modal();
 }
 
@@ -69,6 +76,18 @@ function save() {
             $('#editRow').modal('hide');
             updateTable($("#filterForm"));
             successNoty('Saved');
+        }
+    });
+}
+
+function enableDisable(id) {
+    $.ajax({
+        url: ajaxUrl + id,
+        type: 'POST',
+        data: "",
+        success: function () {
+            updateTable();
+            successNoty('Enable toggled');
         }
     });
 }
