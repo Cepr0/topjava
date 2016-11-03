@@ -78,7 +78,7 @@
         <%--<a class="btn btn-sm btn-primary" onclick="add()"><fmt:message key="meals.add"/></a>--%>
 
         <!--Meals table-->
-        <table class="table table-hover compact" id="mealsTable">
+        <table class="table table-hover table-condensed" id="mealsTable">
             <!--<caption>Optional table caption.</caption>-->
             <thead>
             <tr>
