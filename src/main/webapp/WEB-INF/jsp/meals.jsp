@@ -178,7 +178,13 @@
             paging: false,
             info: false,
             dom: 'Bft',
-            buttons: [{extend: 'mealAdd', text: '<fmt:message key="meals.add"/>'}],
+            buttons: [
+                {extend: 'mealAdd', text: '<fmt:message key="meals.add"/>'}
+            ],
+            "language": {
+                search: "",
+                searchPlaceholder: 'Search in table'
+            },
 //            ajax: {
 //                url: ajaxUrl,
 //                dataSrc: ''
