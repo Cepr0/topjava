@@ -46,9 +46,16 @@ function updateTable(filterForm) {
             }
         });
     } else {
-        $.get(ajaxUrl, function (data) {
-            datatableApi.clear().rows.add(data).draw();
-        });
+        $.ajax({
+            type: "GET",
+            url: ajaxUrl,
+            success: function (data) {
+                datatableApi.clear().rows.add(data).draw();
+            }
+        })
+        // $.get(ajaxUrl, function (data) {
+        //     datatableApi.clear().rows.add(data).draw();
+        // });
     }
 }
 
