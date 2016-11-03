@@ -199,7 +199,6 @@
 
     var ajaxUrl = 'ajax/admin/users/';
     var datatableApi;
-    var chechBoxEvent = false;
 
     $.fn.dataTable.ext.buttons.add = {
         className: 'btn btn-sm btn-primary',
@@ -254,23 +253,22 @@
         updateTable();
 
 
-        $("#usersTable tbody").on("change", "input", function () {
-            chechBoxEvent = true;
+        $("#usersTable tbody").on("change", "input[type=checkbox]", function (event) {
+//            event.stopPropagation();
             var id = $(this).parent().parent().attr("id");
             enableDisable(id);
         });
 
-        $("#usersTable tbody").on("click", "tr", function () {
-            if (chechBoxEvent != true) {
-                $('#id').val($(this).attr("id"));
-                $('#name').val($(this).find('td.user-name').text());
-                $('#email').val($(this).find('td.user-email').text());
-                $('#password').val($(this).find('td.user-password').text());
-
-                $('#editRow').modal();
-            }
-            chechBoxEvent = false;
-        });
+//        $("#usersTable tbody").on("click", "tr", function (event) {
+//            event.currentTarget;
+//
+//            $('#id').val($(this).attr("id"));
+//            $('#name').val($(this).find('td.user-name').text());
+//            $('#email').val($(this).find('td.user-email').text());
+//            $('#password').val($(this).find('td.user-password').text());
+//
+//            $('#editRow').modal();
+//        });
 
         makeEditable();
     });
