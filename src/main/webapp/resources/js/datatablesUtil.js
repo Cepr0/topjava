@@ -80,14 +80,14 @@ function save() {
     });
 }
 
-function enableDisable(id) {
+function enableDisable(id, enabled) {
     $.ajax({
         url: ajaxUrl + id,
         type: 'POST',
-        data: "",
+        data: "enabled="+enabled,
         success: function () {
             updateTable();
-            successNoty('Enable toggled');
+            successNoty('Enable toggled: ' + enabled);
         }
     });
 }

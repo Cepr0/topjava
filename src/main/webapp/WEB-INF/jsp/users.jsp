@@ -252,23 +252,27 @@
 
         updateTable();
 
-
-        $("#usersTable tbody").on("change", "input[type=checkbox]", function (event) {
+//        $("#usersTable tbody").on("change", "input[type=checkbox]", function (event) {
+//            var id = $(this).parent().parent().attr("id");
+//            enableDisable(id);
 //            event.stopPropagation();
-            var id = $(this).parent().parent().attr("id");
-            enableDisable(id);
-        });
-
-//        $("#usersTable tbody").on("click", "tr", function (event) {
-//            event.currentTarget;
-//
-//            $('#id').val($(this).attr("id"));
-//            $('#name').val($(this).find('td.user-name').text());
-//            $('#email').val($(this).find('td.user-email').text());
-//            $('#password').val($(this).find('td.user-password').text());
-//
-//            $('#editRow').modal();
 //        });
+
+        $("#usersTable").on("click", "tr", function (event) {
+            var id = $(this).attr("id");
+            var cell = $(event.target).get(0);
+            if (cell.tagName == "INPUT") { //$(event.target).hasClass("user-enabled")
+                var enabled = cell.value = "on" ? false : true;
+                enableDisable(id, enabled);
+            } else {
+                $('#id').val(id);
+                $('#name').val($(this).find('td.user-name').text());
+                $('#email').val($(this).find('td.user-email').text());
+                $('#password').val($(this).find('td.user-password').text());
+
+                $('#editRow').modal();
+            }
+        });
 
         makeEditable();
     });
