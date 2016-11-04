@@ -49,20 +49,20 @@ function updateTable(filterForm) {
             url: ajaxUrl + "filter",
             data: filterForm != null ? $(filterForm).serialize() : "",
             success: function (data) {
-                datatableApi.clear().rows.add(data).draw();
+                datatable.clear().rows.add(data).draw();
             }
         });
     } else {
-        $.ajax({
-            type: "GET",
-            url: ajaxUrl,
-            success: function (data) {
-                datatableApi.clear().rows.add(data).draw();
-            }
-        })
-        // $.get(ajaxUrl, function (data) {
-        //     datatableApi.clear().rows.add(data).draw();
-        // });
+        // $.ajax({
+        //     type: "GET",
+        //     url: ajaxUrl,
+        //     success: function (data) {
+        //         datatable.clear().rows.add(data).draw();
+        //     }
+        // })
+        $.get(ajaxUrl, function (data) {
+            datatable.clear().rows.add(data).draw();
+        });
     }
 }
 

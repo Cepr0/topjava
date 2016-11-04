@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web.user;
 
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
@@ -29,16 +30,23 @@ public class AdminAjaxController extends AbstractUserController {
         super.enableDisable(id, enabled);
     }
     
+    @Transactional
     @PostMapping
     public void createOrUpdate(@RequestParam("id") Integer id,
                                @RequestParam("name") String name,
                                @RequestParam("email") String email,
-                               @RequestParam("password") String password) {
+                               @RequestParam("password") String password,
+                               @RequestParam("caloriesPerDay") int caloriesPerDay) {
 
         User user = new User(id, name, email, password, Role.ROLE_USER);
+        user.setCaloriesPerDay(caloriesPerDay);
         if (user.isNew()) {
             super.create(user);
         } else {
+            if(password.isEmpty()) {
+                User u = super.get(id);
+                user.setPassword(u.getPassword());
+            }
             super.update(user, id);
         }
     }

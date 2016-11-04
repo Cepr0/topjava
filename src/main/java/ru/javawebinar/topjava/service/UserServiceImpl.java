@@ -35,19 +35,22 @@ public class UserServiceImpl implements UserService {
     public void delete(int id) {
         ExceptionUtil.checkNotFoundWithId(repository.delete(id), id);
     }
-
+    
+    @CacheEvict(value = "users", allEntries = true)
     @Override
     public User get(int id) throws NotFoundException {
         return ExceptionUtil.checkNotFoundWithId(repository.get(id), id);
     }
-
+    
+    @CacheEvict(value = "users", allEntries = true)
     @Override
     public User getByEmail(String email) throws NotFoundException {
         Assert.notNull(email, "email must not be null");
         return ExceptionUtil.checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
-    @Cacheable("users")
+    //@Cacheable("users")
+    @CacheEvict(value = "users", allEntries = true)
     @Override
     public List<User> getAll() {
         return repository.getAll();

@@ -161,3 +161,7 @@ form.filter .actions {
 div.dataTables_wrapper div.dataTables_filter {
     float: right;
 }
+
+div.dataTables_wrapper table.dataTable {
+    width: 100% !important;
+}

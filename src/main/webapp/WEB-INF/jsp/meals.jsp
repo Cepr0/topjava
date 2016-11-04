@@ -13,7 +13,8 @@
 
         <%--Meal window caption and filter toggle button--%>
         <div class="caption">
-            <button class="btn btn-default btn-xs text-uppercase" data-toggle="collapse" data-target="#filterForm">
+            <button class="btn btn-danger btn-xs text-uppercase" data-toggle="collapse" data-target="#filterForm">
+                <span class="glyphicon glyphicon-filter"></span>
                 <fmt:message key="meals.toggleFilter"/>
                 <span class="caret"></span>
             </button>
@@ -143,8 +144,14 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary" data-action="modal"><fmt:message key="common.apply"/></button>
-                            <button id="action-delete" type="button" class="btn btn-default" data-toggle="modal"><fmt:message key="common.delete"/></button>
+                            <button type="submit" class="btn btn-primary" data-action="modal">
+                                <span class="glyphicon glyphicon-ok"></span>
+                                <fmt:message key="common.save"/>
+                            </button>
+                            <button id="action-delete" type="button" class="btn btn-default" data-toggle="modal">
+                                <span class="glyphicon glyphicon-remove"></span>
+                                <fmt:message key="common.delete"/>
+                            </button>
                             <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="common.cancel"/></button>
                         </div>
                     </form>
@@ -160,7 +167,7 @@
 
 <script type="text/javascript">
     var ajaxUrl = 'ajax/meals/';
-    var datatableApi;
+    var datatable;
 
     $.fn.dataTable.ext.buttons.mealAdd = {
         className: 'btn btn-sm btn-primary',
@@ -174,12 +181,12 @@
     $(function () {
 
         // Init DataTable
-        datatableApi = $('#mealsTable').DataTable({
+        datatable = $('#mealsTable').DataTable({
             paging: false,
             info: false,
             dom: 'Bft',
             buttons: [
-                {extend: 'mealAdd', text: '<fmt:message key="meals.add"/>'}
+                {extend: 'mealAdd', text: '<span class="glyphicon glyphicon-cutlery"></span>  <fmt:message key="meals.add"/>'}
             ],
             "language": {
                 search: "",
@@ -192,9 +199,13 @@
             columns: [
                 {data: "dateTime", className: "meal-dateTime"},
                 {data: "description", className: "meal-description"},
-                {data: "calories", className: "meal-calories"}],
+                {data: "calories", className: "meal-calories"}
+            ],
+
             order: [[0, "desc"]],
+
             rowId: 'id',
+
             "createdRow": function ( row, data, index ) {
                 if ( data["exceed"] == true ) {
                     $(row).addClass('text-danger');
@@ -231,10 +242,11 @@
         // On table row click handle
         // Get the current row data and fire editRow modal dialog
         $("#mealsTable tbody").on("click", "tr", function() {
-            $('#id').val($(this).attr("id"));
-            $('#dateTime').val($(this).find('td.meal-dateTime').html());
-            $('#description').val($(this).find('td.meal-description').html());
-            $('#calories').val($(this).find('td.meal-calories').html());
+            var rowData = datatable.row(this).data();
+            $('#id').val(rowData["id"]);
+            $('#dateTime').val(rowData["dateTime"]);
+            $('#description').val(rowData["description"]);
+            $('#calories').val(rowData["calories"]);
 
             $('#editRow').modal();
         });

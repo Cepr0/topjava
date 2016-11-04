@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -48,6 +49,7 @@ public class User extends NamedEntity {
     private boolean enabled = true;
 
     @Column(name = "registered", columnDefinition = "timestamp default now()")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private Date registered = new Date();
 
     @Enumerated(EnumType.STRING)
