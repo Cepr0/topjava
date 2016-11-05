@@ -158,9 +158,9 @@ form.filter .actions {
 .table thead {
     border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
-.table-hover>tbody>tr:hover {
+.table-hover tbody tr:hover {
     background-color: #eeeeee;
-    cursor: hand;
+    cursor: pointer;
 }
 
 .footer {
