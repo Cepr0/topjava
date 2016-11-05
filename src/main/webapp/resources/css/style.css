@@ -31,9 +31,33 @@
     /*margin: 6px 0;*/
 /*}*/
 
+@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Roboto+Mono');
+
 body {
     /*padding-top: 70px;*/
     background-color: #9d9d9d;
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 13px;
+}
+
+code,
+kbd,
+pre,
+samp {
+    font-family: "Roboto Condensed", monospace;
+}
+
+.tooltip {
+    font-family: "Roboto Condensed", sans-serif;
+}
+
+.popover {
+    font-family: "Roboto Condensed", sans-serif;
+}
+
+.container {
+    padding-right: 3px;
+    padding-left: 3px;
 }
 
 .navbar {
@@ -63,9 +87,28 @@ body {
 /*}*/
 
 @media (min-width: 768px) {
+    .container {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
     .well {
         min-width: 680px;
         margin: 30px auto;
+    }
+
+    body {
+        /*padding-top: 70px;*/
+        font-family: "Roboto", sans-serif;
+        font-size: 14px;
+    }
+
+    .tooltip {
+        font-family: "Roboto", sans-serif;
+    }
+
+    .popover {
+        font-family: "Roboto", sans-serif;
     }
 }
 

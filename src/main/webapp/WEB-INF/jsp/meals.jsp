@@ -152,7 +152,7 @@
                                 <span class="glyphicon glyphicon-remove"></span>
                                 <fmt:message key="common.delete"/>
                             </button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="common.cancel"/></button>
+                            <button type="button" class="btn btn-default hidden-xs" data-dismiss="modal"><fmt:message key="common.cancel"/></button>
                         </div>
                     </form>
             </div>

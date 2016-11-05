@@ -105,7 +105,7 @@
                             <span class="glyphicon glyphicon-remove"></span>
                             <fmt:message key="common.delete"/>
                         </button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><fmt:message key="common.cancel"/></button>
+                        <button type="button" class="btn btn-default hidden-xs" data-dismiss="modal"><fmt:message key="common.cancel"/></button>
                     </div>
                 </form>
         </div>
@@ -142,36 +142,36 @@
                 searchPlaceholder: 'Search in table'
             },
             columns: [
-                {data: "enabled", className: "user-enabled"},
+                {data: "enabled", className: "user-enabled",
+                    render: function ( data, type, full, meta ) {
+                        return data == true ? '<input type="checkbox" checked/>' : '<input type="checkbox"/>';
+                    }
+                },
                 {data: "name", className: "user-name"},
-                {data: "email", className: "user-email"},
+                {data: "email", className: "user-email",
+                    render: function ( data, type, full, meta ) {
+                        return data.replace("@", "@&#8203;");
+                    }
+                },
                 {data: "registered", className: "user-registered"},
-                {data: "caloriesPerDay", className: "user-dailyrate"},
-                {data: "roles", className: "user-roles"}
+                {data: "caloriesPerDay", className: "user-dailyrate", visible: false},
+                {data: "roles", className: "user-roles", visible: false}
             ],
 
             order: [[0, "desc"]],
 
-            columnDefs: [{targets: [4, 5], visible: false}],
-
             rowId: 'id',
 
-            "rowCallback": function ( row, data, index ) {
+            createdRow: function (row, data, index) {
 
-                if ( data["enabled"] == true ) {
-                    inputCheckBox = '<input type="checkbox" checked/>';
-                } else {
+                if (!data["enabled"]) {
                     $(row).addClass('text-muted');
                     $(row).css("text-decoration", "line-through");
-                    inputCheckBox = '<input type="checkbox"/>';
                 }
 
-                if ( data["roles"].indexOf("ROLE_ADMIN") != -1) {
+                if (data["roles"].indexOf("ROLE_ADMIN") != -1) {
                     $(row).addClass('text-danger');
                 }
-
-                $("td.user-enabled", row).html(inputCheckBox);
-
 //                var aEmail = '<a href="mailto:' + data["email"] + '">' + data["email"] + '</a>';
 //                $("td.user-email", row).html(aEmail);
             }
