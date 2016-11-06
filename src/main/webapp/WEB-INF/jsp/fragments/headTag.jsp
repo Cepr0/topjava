@@ -8,7 +8,8 @@
     <title><fmt:message key="app.title"/></title>
     <base href="${pageContext.request.contextPath}/"/>
 
-    <link rel="stylesheet" href="resources/css/style.css">
     <link rel="stylesheet" href="webjars/bootstrap/3.3.7-1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="webjars/datetimepicker/2.4.7/jquery.datetimepicker.css">
+    <link rel="stylesheet" href="resources/css/style.css">
     <link rel="shortcut icon" href="resources/images/icon-meal.png">
 </head>

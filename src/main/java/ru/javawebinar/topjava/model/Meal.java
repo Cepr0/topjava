@@ -1,12 +1,12 @@
 package ru.javawebinar.topjava.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -35,9 +35,9 @@ public class Meal extends BaseEntity {
 
     @Column(name = "date_time", nullable = false)
     @NotNull(message = " must be in valid date-time format")
-    //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    //@JsonFormat(pattern="yyyy-MM-dd HH:mm")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)

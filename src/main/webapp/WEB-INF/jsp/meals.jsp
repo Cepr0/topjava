@@ -21,26 +21,26 @@
                         <label class="control-label col-sm-2" for="startDate"><fmt:message key="meals.startDate"/>:</label>
 
                         <div class="col-sm-2">
-                            <input class="form-control" type="date" name="startDate" id="startDate">
+                            <input class="form-control date-field" type="text" name="startDate" id="startDate">
                         </div>
 
                         <label class="control-label col-sm-2" for="endDate"><fmt:message key="meals.endDate"/>:</label>
 
                         <div class="col-sm-2">
-                            <input class="form-control" type="date" name="endDate" id="endDate">
+                            <input class="form-control date-field" type="text" name="endDate" id="endDate">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="startTime"><fmt:message key="meals.startTime"/>:</label>
 
                         <div class="col-sm-2">
-                            <input class="form-control" type="time" name="startTime" id="startTime">
+                            <input class="form-control time-field" type="text" name="startTime" id="startTime">
                         </div>
 
                         <label class="control-label col-sm-2" for="endTime"><fmt:message key="meals.endTime"/>:</label>
 
                         <div class="col-sm-2">
-                            <input class="form-control" type="time" name="endTime" id="endTime">
+                            <input class="form-control time-field" type="text" name="endTime" id="endTime">
                         </div>
                     </div>
                     <div class="form-group">
@@ -60,20 +60,6 @@
                         <th></th>
                     </tr>
                     </thead>
-                    <%--<c:forEach items="${meals}" var="meal">--%>
-                        <%--<jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>--%>
-                        <%--<tr class="${meal.exceed ? 'exceeded' : 'normal'}">--%>
-                            <%--<td>--%>
-                                    <%--&lt;%&ndash;<fmt:parseDate value="${meal.dateTime}" pattern="y-M-dd'T'H:m" var="parsedDate"/>&ndash;%&gt;--%>
-                                    <%--&lt;%&ndash;<fmt:formatDate value="${parsedDate}" pattern="yyyy.MM.dd HH:mm" />&ndash;%&gt;--%>
-                                    <%--${fn:formatDateTime(meal.dateTime)}--%>
-                            <%--</td>--%>
-                            <%--<td>${meal.description}</td>--%>
-                            <%--<td>${meal.calories}</td>--%>
-                            <%--<td><a class="btn btn-xs btn-primary" onclick="updateRow(${meal.id})"><fmt:message key="common.update"/></a></td>--%>
-                            <%--<td><a class="btn btn-xs btn-danger" onclick="deleteRow(${meal.id})"><fmt:message key="common.delete"/></a></td>--%>
-                        <%--</tr>--%>
-                    <%--</c:forEach>--%>
                 </table>
             </div>
         </div>
@@ -96,7 +82,7 @@
                         <label for="dateTime" class="control-label col-xs-3"><fmt:message key="meals.dateTime"/></label>
 
                         <div class="col-xs-9">
-                            <input type="datetime-local" class="form-control" id="dateTime"
+                            <input type="text" class="form-control" id="dateTime"
                                    name="dateTime" placeholder="<fmt:message key="meals.dateTime"/>">
                         </div>
                     </div>
@@ -130,6 +116,7 @@
 </body>
 <script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
 <script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="webjars/datetimepicker/2.4.7/build/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript" src="webjars/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="webjars/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript" src="webjars/noty/2.3.8/js/noty/packaged/jquery.noty.packaged.min.js"></script>
@@ -177,6 +164,29 @@ var ajaxUrl = 'ajax/profile/meals/';
                     $(row).addClass('text-danger');
                 }
             }
+        });
+
+        $.datetimepicker.setLocale('ru');
+
+        $('.date-field').datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            lang: 'ru',
+            dayOfWeekStart: 1
+        });
+
+        $('.time-field').datetimepicker({
+            datepicker: false,
+            format: 'H:i',
+            lang: 'ru',
+            step: 30
+        });
+
+        $('#dateTime').datetimepicker({
+            format: 'Y-m-d H:i',
+            lang: 'ru',
+            dayOfWeekStart: 1,
+            step: 30
         });
 
         makeEditable();
