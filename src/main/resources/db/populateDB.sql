@@ -1,5 +1,9 @@
 -- http://stackoverflow.com/questions/13223820/postgresql-delete-all-content
-TRUNCATE users CASCADE;
+-- TRUNCATE users CASCADE;
+DELETE FROM user_roles;
+DELETE FROM meals;
+DELETE FROM users;
+
 ALTER SEQUENCE global_seq RESTART WITH 100000;
 
 INSERT INTO users (name, email, password)
