@@ -15,14 +15,14 @@ public class MealWithExceed {
 
     private final String description;
 
-    private final int calories;
+    private final Integer calories;
 
     private final boolean exceed;
 
     public MealWithExceed(@JsonProperty("id") Integer id,
                           @JsonProperty("dateTime") LocalDateTime dateTime,
                           @JsonProperty("description") String description,
-                          @JsonProperty("calories") int calories,
+                          @JsonProperty("calories") Integer calories,
                           @JsonProperty("exceed") boolean exceed) {
         this.id = id;
         this.dateTime = dateTime;
@@ -43,7 +43,7 @@ public class MealWithExceed {
         return description;
     }
 
-    public int getCalories() {
+    public Integer getCalories() {
         return calories;
     }
 
